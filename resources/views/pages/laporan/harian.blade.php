@@ -66,7 +66,7 @@
         </div>
 
         <!-- Summary Cards -->
-        <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
             <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
                 <div class="flex items-center">
                     <div class="p-3 rounded-lg bg-green-100">
@@ -93,12 +93,24 @@
             </div>
             <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
                 <div class="flex items-center">
+                    <div class="p-3 rounded-lg bg-purple-100">
+                        <i class="fas fa-money-bill-wave text-purple-600 text-xl"></i>
+                    </div>
+                    <div class="ml-4">
+                        <p class="text-sm font-medium text-gray-500">Total Gaji Dibayar</p>
+                        <p class="text-xl font-bold text-purple-600">Rp
+                            {{ number_format($summary['total_gaji'] ?? 0, 0, ',', '.') }}</p>
+                    </div>
+                </div>
+            </div>
+            <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
+                <div class="flex items-center">
                     <div class="p-3 rounded-lg {{ $summary['saldo'] >= 0 ? 'bg-blue-100' : 'bg-orange-100' }}">
                         <i
                             class="fas fa-wallet {{ $summary['saldo'] >= 0 ? 'text-blue-600' : 'text-orange-600' }} text-xl"></i>
                     </div>
                     <div class="ml-4">
-                        <p class="text-sm font-medium text-gray-500">Saldo</p>
+                        <p class="text-sm font-medium text-gray-500">Saldo Final</p>
                         <p class="text-xl font-bold {{ $summary['saldo'] >= 0 ? 'text-blue-600' : 'text-orange-600' }}">Rp
                             {{ number_format($summary['saldo'], 0, ',', '.') }}</p>
                     </div>
@@ -106,12 +118,12 @@
             </div>
             <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-5">
                 <div class="flex items-center">
-                    <div class="p-3 rounded-lg bg-purple-100">
-                        <i class="fas fa-receipt text-purple-600 text-xl"></i>
+                    <div class="p-3 rounded-lg bg-indigo-100">
+                        <i class="fas fa-receipt text-indigo-600 text-xl"></i>
                     </div>
                     <div class="ml-4">
                         <p class="text-sm font-medium text-gray-500">Jumlah Transaksi</p>
-                        <p class="text-xl font-bold text-purple-600">{{ $summary['jumlah_transaksi'] }}</p>
+                        <p class="text-xl font-bold text-indigo-600">{{ $summary['jumlah_transaksi'] }}</p>
                     </div>
                 </div>
             </div>

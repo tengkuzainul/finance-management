@@ -75,17 +75,22 @@
                 @if ($informasi->lampiran)
                     <div class="mt-6 pt-6 border-t border-slate-100">
                         <h3 class="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-3">Lampiran</h3>
-                        <div class="flex items-center gap-4 p-4 bg-slate-50 rounded-xl">
-                            @php
-                                $extension = pathinfo($informasi->lampiran, PATHINFO_EXTENSION);
-                                $icon = match (strtolower($extension)) {
-                                    'pdf' => 'fa-file-pdf text-red-500',
-                                    'doc', 'docx' => 'fa-file-word text-blue-500',
-                                    'xls', 'xlsx' => 'fa-file-excel text-green-500',
-                                    'jpg', 'jpeg', 'png' => 'fa-file-image text-purple-500',
-                                    default => 'fa-file text-slate-500',
-                                };
-                            @endphp
+                        @php
+                            $extension = strtolower(pathinfo($informasi->lampiran, PATHINFO_EXTENSION));
+                            $isImage = in_array($extension, ['jpg', 'jpeg', 'png', 'gif', 'webp']);
+                            $isPdf = $extension === 'pdf';
+                            $fileUrl = Storage::url($informasi->lampiran);
+                            $icon = match ($extension) {
+                                'pdf' => 'fa-file-pdf text-red-500',
+                                'doc', 'docx' => 'fa-file-word text-blue-500',
+                                'xls', 'xlsx' => 'fa-file-excel text-green-500',
+                                'jpg', 'jpeg', 'png', 'gif', 'webp' => 'fa-file-image text-purple-500',
+                                default => 'fa-file text-slate-500',
+                            };
+                        @endphp
+
+                        {{-- File Info Card --}}
+                        <div class="flex items-center gap-4 p-4 bg-slate-50 rounded-xl mb-4">
                             <div class="w-12 h-12 bg-white rounded-xl flex items-center justify-center shadow-sm">
                                 <i class="fas {{ $icon }} text-xl"></i>
                             </div>
@@ -94,20 +99,64 @@
                                 <p class="text-sm text-slate-500 uppercase">{{ $extension }}</p>
                             </div>
                             <div class="flex items-center gap-2">
-                                @if (in_array(strtolower($extension), ['jpg', 'jpeg', 'png']))
-                                    <button onclick="previewImage('{{ Storage::url($informasi->lampiran) }}')"
+                                @if ($isPdf)
+                                    <a href="{{ $fileUrl }}" target="_blank"
+                                        class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors shadow-sm">
+                                        <i class="fas fa-external-link-alt mr-2"></i>
+                                        Buka Tab Baru
+                                    </a>
+                                @endif
+                                @if ($isImage)
+                                    <button onclick="previewImage('{{ $fileUrl }}')"
                                         class="px-4 py-2 bg-white text-slate-700 rounded-lg hover:bg-slate-100 transition-colors shadow-sm">
                                         <i class="fas fa-eye mr-2"></i>
                                         Preview
                                     </button>
                                 @endif
-                                <a href="{{ Storage::url($informasi->lampiran) }}" target="_blank" download
+                                <a href="{{ $fileUrl }}" target="_blank" download
                                     class="px-4 py-2 bg-orange-500 text-white rounded-lg hover:bg-orange-600 transition-colors shadow-sm shadow-orange-500/30">
                                     <i class="fas fa-download mr-2"></i>
                                     Download
                                 </a>
                             </div>
                         </div>
+
+                        {{-- Inline Preview --}}
+                        @if ($isPdf)
+                            {{-- PDF Preview --}}
+                            <div class="border border-slate-200 rounded-xl overflow-hidden bg-white">
+                                <div
+                                    class="px-4 py-3 bg-slate-100 border-b border-slate-200 flex items-center justify-between">
+                                    <span class="text-sm font-medium text-slate-700">
+                                        <i class="fas fa-file-pdf text-red-500 mr-2"></i>Preview Dokumen PDF
+                                    </span>
+                                    <div class="flex items-center gap-2">
+                                        <button onclick="toggleFullscreen()"
+                                            class="text-sm text-slate-500 hover:text-slate-700">
+                                            <i class="fas fa-expand mr-1"></i>Fullscreen
+                                        </button>
+                                    </div>
+                                </div>
+                                <div id="pdfContainer" class="relative" style="height: 700px;">
+                                    <iframe id="pdfViewer"
+                                        src="{{ $fileUrl }}#toolbar=1&navpanes=0&scrollbar=1&view=FitH"
+                                        class="w-full h-full border-0" type="application/pdf" title="Preview PDF">
+                                        <p class="text-center py-8 text-slate-500">
+                                            Browser Anda tidak mendukung preview PDF.
+                                            <a href="{{ $fileUrl }}" target="_blank"
+                                                class="text-orange-500 hover:underline">Klik di sini</a> untuk membuka.
+                                        </p>
+                                    </iframe>
+                                </div>
+                            </div>
+                        @elseif ($isImage)
+                            {{-- Image Preview --}}
+                            <div class="border border-slate-200 rounded-xl overflow-hidden bg-white p-4">
+                                <img src="{{ $fileUrl }}" alt="Preview Lampiran"
+                                    class="max-w-full max-h-[600px] mx-auto rounded-lg cursor-pointer hover:opacity-90 transition-opacity"
+                                    onclick="previewImage('{{ $fileUrl }}')">
+                            </div>
+                        @endif
                     </div>
                 @endif
             </div>
@@ -255,6 +304,43 @@
             document.getElementById('imagePreviewModal').classList.add('hidden');
             document.getElementById('imagePreviewModal').classList.remove('flex');
         }
+
+        // PDF Fullscreen toggle
+        let isFullscreen = false;
+
+        function toggleFullscreen() {
+            const container = document.getElementById('pdfContainer');
+            const iframe = document.getElementById('pdfViewer');
+
+            if (!container) return;
+
+            if (!isFullscreen) {
+                // Enter fullscreen
+                if (container.requestFullscreen) {
+                    container.requestFullscreen();
+                } else if (container.webkitRequestFullscreen) {
+                    container.webkitRequestFullscreen();
+                } else if (container.msRequestFullscreen) {
+                    container.msRequestFullscreen();
+                }
+                isFullscreen = true;
+            } else {
+                // Exit fullscreen
+                if (document.exitFullscreen) {
+                    document.exitFullscreen();
+                } else if (document.webkitExitFullscreen) {
+                    document.webkitExitFullscreen();
+                } else if (document.msExitFullscreen) {
+                    document.msExitFullscreen();
+                }
+                isFullscreen = false;
+            }
+        }
+
+        // Handle fullscreen change
+        document.addEventListener('fullscreenchange', function() {
+            isFullscreen = !!document.fullscreenElement;
+        });
 
         @if (auth()->user()->is_admin)
 

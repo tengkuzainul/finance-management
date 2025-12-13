@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cabang;
+use App\Models\Gaji;
 use App\Models\Karyawan;
 use App\Models\LaporanKeuangan;
 use App\Models\User;
@@ -99,9 +100,10 @@ class LaporanKeuanganController extends Controller
       $summary = [
          'total_pemasukan' => LaporanKeuangan::pemasukan()->approved()->sum('jumlah'),
          'total_pengeluaran' => LaporanKeuangan::pengeluaran()->approved()->sum('jumlah'),
+         'total_gaji' => Gaji::where('status', 'paid')->sum('nominal_gaji'),
          'pending_count' => LaporanKeuangan::pending()->count(),
       ];
-      $summary['saldo'] = $summary['total_pemasukan'] - $summary['total_pengeluaran'];
+      $summary['saldo'] = $summary['total_pemasukan'] - $summary['total_pengeluaran'] - $summary['total_gaji'];
 
       if ($request->ajax()) {
          return response()->json([
@@ -182,6 +184,7 @@ class LaporanKeuanganController extends Controller
          'bukti_transaksi' => 'nullable|file|mimes:jpeg,png,jpg,pdf|max:5120',
          'catatan' => 'nullable|string',
          'status' => 'nullable|in:Draft,Pending',
+         'save_as_draft' => 'nullable|in:1',
       ], [
          'cabang_id.required' => 'Cabang wajib dipilih',
          'tanggal.required' => 'Tanggal wajib diisi',
@@ -200,6 +203,27 @@ class LaporanKeuanganController extends Controller
             $buktiPath = $request->file('bukti_transaksi')->store('laporan/bukti', 'public');
          }
 
+         // Determine status
+         // Untuk pengeluaran admin: auto-approved kecuali save_as_draft dicentang
+         // Untuk pemasukan: sesuai pilihan (Draft/Pending)
+         $status = LaporanKeuangan::STATUS_DRAFT;
+         $approvedBy = null;
+         $approvedAt = null;
+
+         if ($validated['jenis'] === LaporanKeuangan::JENIS_PENGELUARAN) {
+            // Pengeluaran: auto-approved kecuali save_as_draft
+            if ($request->has('save_as_draft') && $request->save_as_draft == '1') {
+               $status = LaporanKeuangan::STATUS_DRAFT;
+            } else {
+               $status = LaporanKeuangan::STATUS_APPROVED;
+               $approvedBy = Auth::id();
+               $approvedAt = now();
+            }
+         } else {
+            // Pemasukan: sesuai pilihan user
+            $status = $validated['status'] ?? LaporanKeuangan::STATUS_DRAFT;
+         }
+
          $laporan = LaporanKeuangan::create([
             'cabang_id' => $validated['cabang_id'],
             'karyawan_id' => $validated['karyawan_id'] ?? null,
@@ -211,7 +235,9 @@ class LaporanKeuanganController extends Controller
             'jumlah' => $validated['jumlah'],
             'bukti_transaksi' => $buktiPath,
             'catatan' => $validated['catatan'] ?? null,
-            'status' => $validated['status'] ?? LaporanKeuangan::STATUS_DRAFT,
+            'status' => $status,
+            'approved_by' => $approvedBy,
+            'approved_at' => $approvedAt,
          ]);
 
          return response()->json([
@@ -494,14 +520,19 @@ class LaporanKeuanganController extends Controller
       $query = LaporanKeuangan::with(['cabang', 'karyawan', 'creator', 'approver'])
          ->approved();
 
-      // Filter by cabang
+      // Filter by cabang (decode hash id)
+      $cabangId = null;
       if ($request->filled('cabang_id')) {
-         $query->where('cabang_id', $request->cabang_id);
+         $decoded = Hashids::decode($request->cabang_id);
+         $cabangId = !empty($decoded) ? $decoded[0] : $request->cabang_id;
+         $query->where('cabang_id', $cabangId);
       }
 
-      // Filter by jenis
-      if ($request->filled('jenis')) {
-         $query->where('jenis', $request->jenis);
+      // Filter by jenis - only valid values
+      $jenisFilter = null;
+      if ($request->filled('jenis') && in_array($request->jenis, [LaporanKeuangan::JENIS_PEMASUKAN, LaporanKeuangan::JENIS_PENGELUARAN])) {
+         $jenisFilter = $request->jenis;
+         $query->where('jenis', $jenisFilter);
       }
 
       // Filter by tanggal
@@ -514,16 +545,25 @@ class LaporanKeuanganController extends Controller
 
       // Get cabang info if filtered
       $cabang = null;
-      if ($request->filled('cabang_id')) {
-         $cabang = Cabang::find($request->cabang_id);
+      if ($cabangId) {
+         $cabang = Cabang::find($cabangId);
       }
+
+      // Calculate total gaji paid in the date range
+      $gajiQuery = Gaji::where('status', 'paid')
+         ->whereBetween('tanggal', [$tanggalMulai, $tanggalAkhir]);
+      if ($cabangId) {
+         $gajiQuery->where('cabang_id', $cabangId);
+      }
+      $totalGaji = $gajiQuery->sum('nominal_gaji');
 
       // Calculate summary
       $summary = [
          'total_pemasukan' => $laporans->where('jenis', LaporanKeuangan::JENIS_PEMASUKAN)->sum('jumlah'),
          'total_pengeluaran' => $laporans->where('jenis', LaporanKeuangan::JENIS_PENGELUARAN)->sum('jumlah'),
+         'total_gaji' => $totalGaji,
       ];
-      $summary['saldo'] = $summary['total_pemasukan'] - $summary['total_pengeluaran'];
+      $summary['saldo'] = $summary['total_pemasukan'] - $summary['total_pengeluaran'] - $summary['total_gaji'];
 
       // Get owner/admin user for signature (get first admin with signature)
       $owner = User::where('is_admin', true)
@@ -537,7 +577,7 @@ class LaporanKeuanganController extends Controller
          'summary' => $summary,
          'tanggalMulai' => Carbon::parse($tanggalMulai),
          'tanggalAkhir' => Carbon::parse($tanggalAkhir),
-         'jenisFilter' => $request->get('jenis'),
+         'jenisFilter' => $jenisFilter,
          'owner' => $owner,
       ]);
 
@@ -556,14 +596,19 @@ class LaporanKeuanganController extends Controller
       $query = LaporanKeuangan::with(['cabang', 'karyawan', 'creator', 'approver'])
          ->approved();
 
-      // Filter by cabang
+      // Filter by cabang (decode hash id)
+      $cabangId = null;
       if ($request->filled('cabang_id')) {
-         $query->where('cabang_id', $request->cabang_id);
+         $decoded = Hashids::decode($request->cabang_id);
+         $cabangId = !empty($decoded) ? $decoded[0] : $request->cabang_id;
+         $query->where('cabang_id', $cabangId);
       }
 
-      // Filter by jenis
-      if ($request->filled('jenis')) {
-         $query->where('jenis', $request->jenis);
+      // Filter by jenis - only valid values
+      $jenisFilter = null;
+      if ($request->filled('jenis') && in_array($request->jenis, [LaporanKeuangan::JENIS_PEMASUKAN, LaporanKeuangan::JENIS_PENGELUARAN])) {
+         $jenisFilter = $request->jenis;
+         $query->where('jenis', $jenisFilter);
       }
 
       // Filter by tanggal
@@ -576,16 +621,25 @@ class LaporanKeuanganController extends Controller
 
       // Get cabang info if filtered
       $cabang = null;
-      if ($request->filled('cabang_id')) {
-         $cabang = Cabang::find($request->cabang_id);
+      if ($cabangId) {
+         $cabang = Cabang::find($cabangId);
       }
+
+      // Calculate total gaji paid in the date range
+      $gajiQuery = Gaji::where('status', 'paid')
+         ->whereBetween('tanggal', [$tanggalMulai, $tanggalAkhir]);
+      if ($cabangId) {
+         $gajiQuery->where('cabang_id', $cabangId);
+      }
+      $totalGaji = $gajiQuery->sum('nominal_gaji');
 
       // Calculate summary
       $summary = [
          'total_pemasukan' => $laporans->where('jenis', LaporanKeuangan::JENIS_PEMASUKAN)->sum('jumlah'),
          'total_pengeluaran' => $laporans->where('jenis', LaporanKeuangan::JENIS_PENGELUARAN)->sum('jumlah'),
+         'total_gaji' => $totalGaji,
       ];
-      $summary['saldo'] = $summary['total_pemasukan'] - $summary['total_pengeluaran'];
+      $summary['saldo'] = $summary['total_pemasukan'] - $summary['total_pengeluaran'] - $summary['total_gaji'];
 
       // Get owner/admin user for signature (get first admin with signature)
       $owner = User::where('is_admin', true)
@@ -599,7 +653,7 @@ class LaporanKeuanganController extends Controller
          'summary' => $summary,
          'tanggalMulai' => Carbon::parse($tanggalMulai),
          'tanggalAkhir' => Carbon::parse($tanggalAkhir),
-         'jenisFilter' => $request->get('jenis'),
+         'jenisFilter' => $jenisFilter,
          'owner' => $owner,
       ]);
 

@@ -137,6 +137,7 @@ Route::middleware('auth')->group(function () {
     // =====================================================
     Route::prefix('karyawan')->name('karyawan.')->middleware('karyawan')->group(function () {
         // Input Pemasukan
+        Route::get('/pemasukan', [KaryawanLaporanController::class, 'indexPemasukan'])->name('pemasukan.index');
         Route::get('/pemasukan/create', [KaryawanLaporanController::class, 'createPemasukan'])->name('pemasukan.create');
         Route::post('/pemasukan', [KaryawanLaporanController::class, 'storePemasukan'])->name('pemasukan.store');
 
@@ -156,6 +157,10 @@ Route::middleware('auth')->group(function () {
         Route::get('/gaji', [GajiController::class, 'myGaji'])->name('gaji.index');
         Route::get('/gaji/{id}', [GajiController::class, 'myGajiDetail'])->name('gaji.show');
         Route::get('/gaji/{id}/slip-pdf', [GajiController::class, 'mySlipPdf'])->name('gaji.slip-pdf');
+
+        // Informasi untuk Karyawan
+        Route::get('/informasi', [KaryawanLaporanController::class, 'indexInformasi'])->name('informasi.index');
+        Route::get('/informasi/{id}', [KaryawanLaporanController::class, 'showInformasi'])->name('informasi.show');
     });
 
     // =====================================================

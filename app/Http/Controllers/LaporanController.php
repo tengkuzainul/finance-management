@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Cabang;
+use App\Models\Gaji;
 use App\Models\LaporanKeuangan;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -38,12 +39,21 @@ class LaporanController extends Controller
       // Group by cabang
       $groupedByCabang = $laporans->groupBy('cabang_id');
 
+      // Calculate total gaji paid for this date
+      $gajiQuery = Gaji::where('status', 'paid')
+         ->whereDate('tanggal', $tanggal);
+      if ($cabangId) {
+         $gajiQuery->where('cabang_id', $cabangId);
+      }
+      $totalGaji = $gajiQuery->sum('nominal_gaji');
+
       $summary = [
          'total_pemasukan' => $laporans->where('jenis', 'Pemasukan')->sum('jumlah'),
          'total_pengeluaran' => $laporans->where('jenis', 'Pengeluaran')->sum('jumlah'),
+         'total_gaji' => $totalGaji,
          'jumlah_transaksi' => $laporans->count(),
       ];
-      $summary['saldo'] = $summary['total_pemasukan'] - $summary['total_pengeluaran'];
+      $summary['saldo'] = $summary['total_pemasukan'] - $summary['total_pengeluaran'] - $summary['total_gaji'];
 
       $cabangs = Cabang::active()->orderBy('nama_cabang')->get();
 
@@ -96,12 +106,21 @@ class LaporanController extends Controller
       // Group by cabang
       $groupedByCabang = $laporans->groupBy('cabang_id');
 
+      // Calculate total gaji paid for this week
+      $gajiQuery = Gaji::where('status', 'paid')
+         ->whereBetween('tanggal', [$startOfWeek, $endOfWeek]);
+      if ($cabangId) {
+         $gajiQuery->where('cabang_id', $cabangId);
+      }
+      $totalGaji = $gajiQuery->sum('nominal_gaji');
+
       $summary = [
          'total_pemasukan' => $laporans->where('jenis', 'Pemasukan')->sum('jumlah'),
          'total_pengeluaran' => $laporans->where('jenis', 'Pengeluaran')->sum('jumlah'),
+         'total_gaji' => $totalGaji,
          'jumlah_transaksi' => $laporans->count(),
       ];
-      $summary['saldo'] = $summary['total_pemasukan'] - $summary['total_pengeluaran'];
+      $summary['saldo'] = $summary['total_pemasukan'] - $summary['total_pengeluaran'] - $summary['total_gaji'];
 
       $cabangs = Cabang::active()->orderBy('nama_cabang')->get();
 
@@ -188,7 +207,15 @@ class LaporanController extends Controller
          'total_pengeluaran' => $laporans->where('jenis', 'Pengeluaran')->sum('jumlah'),
          'jumlah_transaksi' => $laporans->count(),
       ];
-      $summary['saldo'] = $summary['total_pemasukan'] - $summary['total_pengeluaran'];
+
+      // Calculate total gaji paid for this month
+      $gajiQuery = Gaji::where('status', 'paid')
+         ->whereBetween('tanggal', [$startOfMonth, $endOfMonth]);
+      if ($cabangId) {
+         $gajiQuery->where('cabang_id', $cabangId);
+      }
+      $summary['total_gaji'] = $gajiQuery->sum('nominal_gaji');
+      $summary['saldo'] = $summary['total_pemasukan'] - $summary['total_pengeluaran'] - $summary['total_gaji'];
 
       $cabangs = Cabang::active()->orderBy('nama_cabang')->get();
 

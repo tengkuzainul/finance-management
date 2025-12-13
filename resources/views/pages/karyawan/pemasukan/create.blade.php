@@ -204,7 +204,7 @@
 
             const btn = status === 'draft' ? document.getElementById('btnDraft') : document.getElementById('btnSubmit');
             const otherBtn = status === 'draft' ? document.getElementById('btnSubmit') : document.getElementById(
-            'btnDraft');
+                'btnDraft');
             const spinner = btn.querySelector('.spinner');
             const icon = btn.querySelector('.icon');
             const text = btn.querySelector('.text');
@@ -263,8 +263,4 @@
                 });
         }
     </script>
-@endpush
-});
-});
-</script>
 @endpush

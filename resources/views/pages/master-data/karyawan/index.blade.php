@@ -61,12 +61,12 @@
                 <div class="flex-1">
                     <div class="relative">
                         <input type="text" name="search" value="{{ request('search') }}"
-                            placeholder="Cari nama, NIK, atau jabatan..."
+                            placeholder="Cari nama, NIK, atau email..."
                             class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-orange focus:border-brand-orange">
                         <i class="fas fa-search absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"></i>
                     </div>
                 </div>
-                <div class="sm:w-48">
+                <div class="sm:w-60">
                     <select name="cabang_id"
                         class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-orange focus:border-brand-orange">
                         <option value="">Semua Cabang</option>
@@ -78,7 +78,7 @@
                         @endforeach
                     </select>
                 </div>
-                <div class="sm:w-36">
+                <div class="sm:w-60">
                     <select name="status"
                         class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-orange focus:border-brand-orange">
                         <option value="">Semua Status</option>
@@ -88,7 +88,7 @@
                     </select>
                 </div>
                 <button type="submit"
-                    class="px-6 py-2 bg-brand-blue text-white font-medium rounded-lg hover:bg-blue-700 transition-colors">
+                    class="px-6 py-2 bg-transparent text-blue-700 border border-blue-700 hover:text-white font-medium rounded-lg hover:bg-blue-700 transition-colors">
                     <i class="fas fa-filter mr-2"></i>Filter
                 </button>
                 @if (request()->hasAny(['search', 'cabang_id', 'status']))

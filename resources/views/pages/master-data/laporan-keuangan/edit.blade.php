@@ -103,7 +103,7 @@
                                     @foreach ($karyawans as $karyawan)
                                         <option value="{{ $karyawan->hash_id }}"
                                             {{ $laporanKeuangan->karyawan_id == $karyawan->id ? 'selected' : '' }}>
-                                            {{ $karyawan->nama_lengkap }} - {{ $karyawan->jabatan }}
+                                            {{ $karyawan->nama_lengkap }} ({{ $karyawan->nik }})
                                         </option>
                                     @endforeach
                                 </select>

@@ -241,7 +241,7 @@
         <div class="header">
             <h1>UMKM KEBAB IKHWAN</h1>
             <h2>LAPORAN KEUANGAN</h2>
-            <p>Sistem Informasi Keuangan - Laporan {{ $jenisFilter ?? 'Pemasukan & Pengeluaran' }}</p>
+            <p>Sistem Informasi Keuangan - Laporan {{ $jenisFilter ?? 'Semua Transaksi' }}</p>
         </div>
 
         <!-- Period Info -->
@@ -267,6 +267,11 @@
                         <td class="label">Jenis Transaksi</td>
                         <td>: {{ $jenisFilter }}</td>
                     </tr>
+                @else
+                    <tr>
+                        <td class="label">Jenis Transaksi</td>
+                        <td>: Semua Jenis</td>
+                    </tr>
                 @endif
                 <tr>
                     <td class="label">Tanggal Cetak</td>
@@ -287,8 +292,12 @@
                         <div>Total Pengeluaran</div>
                         <div class="amount">Rp {{ number_format($summary['total_pengeluaran'], 0, ',', '.') }}</div>
                     </td>
+                    <td class="pengeluaran">
+                        <div>Total Gaji Dibayar</div>
+                        <div class="amount">Rp {{ number_format($summary['total_gaji'] ?? 0, 0, ',', '.') }}</div>
+                    </td>
                     <td class="saldo">
-                        <div>Saldo/Profit</div>
+                        <div>Saldo Final</div>
                         <div class="amount">Rp {{ number_format($summary['saldo'], 0, ',', '.') }}</div>
                     </td>
                 </tr>

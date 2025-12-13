@@ -29,7 +29,7 @@ class KaryawanController extends Controller
             $q->where('nama_lengkap', 'like', "%{$search}%")
                ->orWhere('nik', 'like', "%{$search}%")
                ->orWhere('email', 'like', "%{$search}%")
-               ->orWhere('jabatan', 'like', "%{$search}%");
+               ->orWhere('no_telepon', 'like', "%{$search}%");
          });
       }
 
@@ -40,11 +40,6 @@ class KaryawanController extends Controller
          $decoded = Hashids::decode($cabangId);
          $cabangId = !empty($decoded) ? $decoded[0] : $cabangId;
          $query->where('cabang_id', $cabangId);
-      }
-
-      // Filter by status karyawan
-      if ($request->filled('status_karyawan')) {
-         $query->where('status_karyawan', $request->status_karyawan);
       }
 
       // Filter by status aktif
@@ -431,7 +426,7 @@ class KaryawanController extends Controller
          $query->where('nama_lengkap', 'like', '%' . $request->search . '%');
       }
 
-      $karyawans = $query->select('id', 'nama_lengkap', 'nik', 'jabatan', 'cabang_id')
+      $karyawans = $query->select('id', 'nama_lengkap', 'nik', 'cabang_id')
          ->orderBy('nama_lengkap')
          ->get();
 

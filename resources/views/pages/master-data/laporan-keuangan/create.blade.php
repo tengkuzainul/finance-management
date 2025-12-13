@@ -100,7 +100,7 @@
                                     @foreach ($karyawans as $karyawan)
                                         <option value="{{ $karyawan->hash_id }}"
                                             data-cabang="{{ $karyawan->cabang?->hash_id }}">
-                                            {{ $karyawan->nama_lengkap }} - {{ $karyawan->jabatan }}
+                                            {{ $karyawan->nama_lengkap }} ({{ $karyawan->nik }})
                                         </option>
                                     @endforeach
                                 </select>
@@ -164,22 +164,38 @@
                         <!-- Status -->
                         <div>
                             <label class="block text-sm font-medium text-gray-700 mb-2">
-                                Simpan Sebagai
+                                Status
                             </label>
-                            <div class="flex gap-4">
-                                <label class="flex items-center gap-2 cursor-pointer">
-                                    <input type="radio" name="status" value="Draft" checked
-                                        class="w-4 h-4 text-brand-orange border-gray-300 focus:ring-brand-orange">
-                                    <span class="text-gray-700">Draft</span>
-                                    <span class="text-xs text-gray-500">(Bisa diedit lagi)</span>
-                                </label>
-                                <label class="flex items-center gap-2 cursor-pointer">
-                                    <input type="radio" name="status" value="Pending"
-                                        class="w-4 h-4 text-brand-orange border-gray-300 focus:ring-brand-orange">
-                                    <span class="text-gray-700">Ajukan Approval</span>
-                                    <span class="text-xs text-gray-500">(Menunggu persetujuan)</span>
-                                </label>
-                            </div>
+                            @if ($jenis == 'Pengeluaran')
+                                {{-- Untuk pengeluaran admin: default auto-approved, bisa pilih draft untuk rencana --}}
+                                <div class="flex items-center gap-2">
+                                    <input type="checkbox" name="save_as_draft" id="save_as_draft" value="1"
+                                        class="w-4 h-4 text-brand-orange border-gray-300 rounded focus:ring-brand-orange">
+                                    <label for="save_as_draft" class="text-gray-700 cursor-pointer">Simpan sebagai
+                                        Draft</label>
+                                    <span class="text-xs text-gray-500">(Untuk rencana pengeluaran yang bisa diedit)</span>
+                                </div>
+                                <p class="text-sm text-green-600 mt-2">
+                                    <i class="fas fa-check-circle mr-1"></i>
+                                    Pengeluaran akan langsung disetujui jika tidak dicentang
+                                </p>
+                            @else
+                                {{-- Untuk pemasukan: pilihan draft atau pending --}}
+                                <div class="flex gap-4">
+                                    <label class="flex items-center gap-2 cursor-pointer">
+                                        <input type="radio" name="status" value="Draft" checked
+                                            class="w-4 h-4 text-brand-orange border-gray-300 focus:ring-brand-orange">
+                                        <span class="text-gray-700">Draft</span>
+                                        <span class="text-xs text-gray-500">(Bisa diedit lagi)</span>
+                                    </label>
+                                    <label class="flex items-center gap-2 cursor-pointer">
+                                        <input type="radio" name="status" value="Pending"
+                                            class="w-4 h-4 text-brand-orange border-gray-300 focus:ring-brand-orange">
+                                        <span class="text-gray-700">Ajukan Approval</span>
+                                        <span class="text-xs text-gray-500">(Menunggu persetujuan)</span>
+                                    </label>
+                                </div>
+                            @endif
                         </div>
                     </div>
 

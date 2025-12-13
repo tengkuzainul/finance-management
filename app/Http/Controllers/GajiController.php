@@ -323,11 +323,12 @@ class GajiController extends Controller
          $query->where('status', $request->status);
       }
 
-      // Filter by month
+      // Filter by month and year (separate fields)
       if ($request->filled('bulan')) {
-         $bulan = Carbon::parse($request->bulan);
-         $query->whereMonth('tanggal', $bulan->month)
-            ->whereYear('tanggal', $bulan->year);
+         $query->whereMonth('tanggal', $request->bulan);
+      }
+      if ($request->filled('tahun')) {
+         $query->whereYear('tanggal', $request->tahun);
       }
 
       // Filter by date range

@@ -30,10 +30,10 @@ class DatabaseSeeder extends Seeder
         );
 
         // Call other seeders
-        $this->call([
-            CabangSeeder::class,
-            KaryawanSeeder::class,
-            LaporanKeuanganSeeder::class,
-        ]);
+        // $this->call([
+        //     CabangSeeder::class,
+        //     KaryawanSeeder::class,
+        //     LaporanKeuanganSeeder::class,
+        // ]);
     }
 }

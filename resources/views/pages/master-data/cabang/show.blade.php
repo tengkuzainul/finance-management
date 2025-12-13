@@ -120,7 +120,7 @@
                                         </div>
                                         <div>
                                             <p class="font-medium text-gray-900">{{ $karyawan->nama_lengkap }}</p>
-                                            <p class="text-sm text-gray-500">{{ $karyawan->jabatan }}</p>
+                                            <p class="text-sm text-gray-500">{{ $karyawan->nik }}</p>
                                         </div>
                                     </div>
                                     <span

@@ -6,6 +6,7 @@ use App\Models\Cabang;
 use App\Models\Karyawan;
 use App\Models\LaporanKeuangan;
 use App\Models\Notification;
+use App\Models\Informasi;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\View\View;
@@ -22,6 +23,58 @@ class KaryawanLaporanController extends Controller
    {
       $user = Auth::user();
       return Karyawan::where('user_id', $user->id)->first();
+   }
+
+   /**
+    * List pemasukan dari karyawan sendiri
+    */
+   public function indexPemasukan(Request $request): View
+   {
+      $karyawan = $this->getKaryawanForUser();
+
+      if (!$karyawan) {
+         abort(403, 'Akun Anda tidak terhubung dengan data karyawan. Hubungi administrator.');
+      }
+
+      $query = LaporanKeuangan::with(['cabang'])
+         ->where('karyawan_id', $karyawan->id)
+         ->where('jenis', LaporanKeuangan::JENIS_PEMASUKAN);
+
+      // Filter tanggal
+      if ($request->filled('tanggal_dari')) {
+         $query->whereDate('tanggal', '>=', $request->tanggal_dari);
+      }
+      if ($request->filled('tanggal_sampai')) {
+         $query->whereDate('tanggal', '<=', $request->tanggal_sampai);
+      }
+
+      // Filter status
+      if ($request->filled('status')) {
+         $query->where('status', $request->status);
+      }
+
+      // Filter kategori
+      if ($request->filled('kategori')) {
+         $query->where('kategori', $request->kategori);
+      }
+
+      $laporans = $query->orderBy('tanggal', 'desc')->paginate(15);
+
+      // Summary
+      $summaryQuery = LaporanKeuangan::where('karyawan_id', $karyawan->id)
+         ->where('jenis', LaporanKeuangan::JENIS_PEMASUKAN);
+
+      $summary = [
+         'total' => $summaryQuery->count(),
+         'approved' => (clone $summaryQuery)->where('status', LaporanKeuangan::STATUS_APPROVED)->count(),
+         'pending' => (clone $summaryQuery)->where('status', LaporanKeuangan::STATUS_PENDING)->count(),
+         'draft' => (clone $summaryQuery)->where('status', LaporanKeuangan::STATUS_DRAFT)->count(),
+         'total_nilai' => (clone $summaryQuery)->where('status', LaporanKeuangan::STATUS_APPROVED)->sum('jumlah'),
+      ];
+
+      $kategoriList = LaporanKeuangan::KATEGORI_PEMASUKAN;
+
+      return view('pages.karyawan.pemasukan.index', compact('laporans', 'karyawan', 'summary', 'kategoriList'));
    }
 
    /**
@@ -504,5 +557,32 @@ class KaryawanLaporanController extends Controller
             'message' => 'Terjadi kesalahan: ' . $e->getMessage()
          ], 500);
       }
+   }
+
+   /**
+    * List informasi manajemen untuk karyawan
+    */
+   public function indexInformasi(Request $request): View
+   {
+      $informasiList = Informasi::orderBy('created_at', 'desc')
+         ->paginate(10);
+
+      return view('pages.karyawan.informasi.index', compact('informasiList'));
+   }
+
+   /**
+    * Show detail informasi untuk karyawan
+    */
+   public function showInformasi(string $id): View
+   {
+      // Decode hash ID
+      $decoded = \Vinkla\Hashids\Facades\Hashids::decode($id);
+      if (empty($decoded)) {
+         abort(404, 'Informasi tidak ditemukan');
+      }
+
+      $informasi = Informasi::findOrFail($decoded[0]);
+
+      return view('pages.karyawan.informasi.show', compact('informasi'));
    }
 }

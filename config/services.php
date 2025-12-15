@@ -35,4 +35,17 @@ return [
         ],
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Fonnte WhatsApp API
+    |--------------------------------------------------------------------------
+    |
+    | Untuk mengirim notifikasi WhatsApp ke karyawan.
+    | Daftar dan dapatkan token di https://fonnte.com
+    |
+    */
+    'fonnte' => [
+        'token' => env('FONNTE_TOKEN'),
+    ],
+
 ];

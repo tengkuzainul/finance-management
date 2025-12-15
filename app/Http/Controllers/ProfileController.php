@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\User;
+use App\Models\Karyawan;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 use Illuminate\Validation\Rules\Password;
 
@@ -35,7 +38,7 @@ class ProfileController extends Controller
       ]);
 
       try {
-         $user = Auth::user();
+         $user = User::find(Auth::id());
 
          // Delete old avatar if exists
          if ($user->avatar && Storage::disk('public')->exists($user->avatar)) {
@@ -46,7 +49,8 @@ class ProfileController extends Controller
          $path = $request->file('avatar')->store('avatars', 'public');
 
          // Update user
-         $user->update(['avatar' => $path]);
+         $user->avatar = $path;
+         $user->save();
 
          return response()->json([
             'success' => true,
@@ -67,7 +71,7 @@ class ProfileController extends Controller
    public function removeAvatar(): JsonResponse
    {
       try {
-         $user = Auth::user();
+         $user = User::find(Auth::id());
 
          // Delete avatar file if exists
          if ($user->avatar && Storage::disk('public')->exists($user->avatar)) {
@@ -75,7 +79,8 @@ class ProfileController extends Controller
          }
 
          // Update user
-         $user->update(['avatar' => null]);
+         $user->avatar = null;
+         $user->save();
 
          return response()->json([
             'success' => true,
@@ -94,11 +99,11 @@ class ProfileController extends Controller
     */
    public function updateProfile(Request $request): JsonResponse
    {
-      $user = Auth::user();
+      $userId = Auth::id();
 
       $validated = $request->validate([
          'name' => 'required|string|max:255',
-         'email' => 'required|email|max:255|unique:users,email,' . $user->id,
+         'email' => 'required|email|max:255|unique:users,email,' . $userId,
          'phone' => 'nullable|string|max:20',
       ], [
          'name.required' => 'Nama wajib diisi',
@@ -108,16 +113,31 @@ class ProfileController extends Controller
       ]);
 
       try {
-         $user->update([
-            'name' => $validated['name'],
-            'email' => $validated['email'],
-         ]);
+         DB::beginTransaction();
+
+         // Update user data
+         $user = User::find($userId);
+         $user->name = $validated['name'];
+         $user->email = $validated['email'];
+         $user->save();
+
+         // Update karyawan data (phone number) if exists
+         $karyawan = Karyawan::where('user_id', $userId)->first();
+         if ($karyawan && isset($validated['phone'])) {
+            $karyawan->no_telepon = $validated['phone'];
+            $karyawan->nama_lengkap = $validated['name']; // Sync name
+            $karyawan->email = $validated['email']; // Sync email
+            $karyawan->save();
+         }
+
+         DB::commit();
 
          return response()->json([
             'success' => true,
             'message' => 'Profil berhasil diperbarui'
          ]);
       } catch (\Exception $e) {
+         DB::rollBack();
          return response()->json([
             'success' => false,
             'message' => 'Gagal memperbarui profil: ' . $e->getMessage()
@@ -140,7 +160,7 @@ class ProfileController extends Controller
          'password.min' => 'Password minimal 8 karakter',
       ]);
 
-      $user = Auth::user();
+      $user = User::find(Auth::id());
 
       // Check current password
       if (!Hash::check($validated['current_password'], $user->password)) {
@@ -151,9 +171,8 @@ class ProfileController extends Controller
       }
 
       try {
-         $user->update([
-            'password' => Hash::make($validated['password'])
-         ]);
+         $user->password = Hash::make($validated['password']);
+         $user->save();
 
          return response()->json([
             'success' => true,
@@ -179,8 +198,9 @@ class ProfileController extends Controller
       ]);
 
       try {
-         $user = Auth::user();
-         $user->update(['ttd' => $request->signature]);
+         $user = User::find(Auth::id());
+         $user->ttd = $request->signature;
+         $user->save();
 
          return response()->json([
             'success' => true,
@@ -200,8 +220,9 @@ class ProfileController extends Controller
    public function removeSignature(): JsonResponse
    {
       try {
-         $user = Auth::user();
-         $user->update(['ttd' => null]);
+         $user = User::find(Auth::id());
+         $user->ttd = null;
+         $user->save();
 
          return response()->json([
             'success' => true,

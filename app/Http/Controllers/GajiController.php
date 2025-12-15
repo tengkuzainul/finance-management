@@ -8,6 +8,7 @@ use App\Models\Karyawan;
 use App\Models\LaporanKeuangan;
 use App\Models\Pengaturan;
 use App\Models\User;
+use App\Services\WhatsAppService;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -172,15 +173,24 @@ class GajiController extends Controller
          abort(404);
       }
 
-      $gaji = Gaji::findOrFail($decoded[0]);
+      $gaji = Gaji::with(['karyawan', 'cabang'])->findOrFail($decoded[0]);
       $gaji->update([
          'status' => 'paid',
          'approved_by' => Auth::id(),
          'paid_at' => now(),
       ]);
 
-      return redirect()->back()
-         ->with('success', 'Gaji telah ditandai sebagai dibayar');
+      // Send WhatsApp notification
+      $waResult = $this->sendWhatsAppNotification($gaji);
+
+      $message = 'Gaji telah ditandai sebagai dibayar';
+      if ($waResult['success']) {
+         $message .= ' dan notifikasi WhatsApp telah dikirim ke karyawan.';
+      } elseif (!empty(config('services.fonnte.token'))) {
+         $message .= '. Namun notifikasi WhatsApp gagal dikirim: ' . ($waResult['message'] ?? 'Unknown error');
+      }
+
+      return redirect()->back()->with('success', $message);
    }
 
    /**
@@ -194,10 +204,14 @@ class GajiController extends Controller
       ]);
 
       $count = 0;
+      $waSuccess = 0;
+      $waFailed = 0;
+      $paidGajis = [];
+
       foreach ($request->gaji_ids as $hashId) {
          $decoded = Hashids::decode($hashId);
          if (!empty($decoded)) {
-            $gaji = Gaji::find($decoded[0]);
+            $gaji = Gaji::with(['karyawan', 'cabang'])->find($decoded[0]);
             if ($gaji && $gaji->status === 'pending') {
                $gaji->update([
                   'status' => 'paid',
@@ -205,12 +219,40 @@ class GajiController extends Controller
                   'paid_at' => now(),
                ]);
                $count++;
+               $paidGajis[] = $gaji;
             }
          }
       }
 
-      return redirect()->back()
-         ->with('success', "{$count} gaji telah ditandai sebagai dibayar");
+      // Send WhatsApp notifications for all paid gajis
+      if (!empty($paidGajis) && !empty(config('services.fonnte.token'))) {
+         foreach ($paidGajis as $gaji) {
+            $result = $this->sendWhatsAppNotification($gaji);
+            if ($result['success']) {
+               $waSuccess++;
+            } else {
+               $waFailed++;
+            }
+            // Small delay to avoid rate limiting
+            usleep(500000); // 0.5 second
+         }
+      }
+
+      $message = "{$count} gaji telah ditandai sebagai dibayar";
+      if ($waSuccess > 0 || $waFailed > 0) {
+         $message .= ". Notifikasi WhatsApp: {$waSuccess} berhasil, {$waFailed} gagal.";
+      }
+
+      return redirect()->back()->with('success', $message);
+   }
+
+   /**
+    * Send WhatsApp notification for gaji payment
+    */
+   private function sendWhatsAppNotification(Gaji $gaji): array
+   {
+      $whatsApp = new WhatsAppService();
+      return $whatsApp->sendSalaryNotification($gaji);
    }
 
    /**

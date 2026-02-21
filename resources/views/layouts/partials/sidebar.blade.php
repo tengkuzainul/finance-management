@@ -5,8 +5,8 @@
     <div class="h-16 flex items-center justify-between px-4 border-b border-slate-200">
         <a href="{{ url('/dashboard') }}" class="flex items-center gap-3">
             <div
-                class="w-10 h-10 bg-linear-to-br from-orange-500 to-orange-600 rounded-xl flex items-center justify-center shadow-lg shadow-orange-500/30">
-                <i class="fas fa-utensils text-white text-lg"></i>
+                class="w-10 h-10 rounded-xl flex items-center justify-center">
+                <img src="{{ URL::asset('logo.png') }}" alt="{{ config('app.name') }}" class="w-6 h-6 object-contain">
             </div>
             <div>
                 <h1 class="text-lg font-bold text-slate-800 leading-tight">Kebab Ikhwan</h1>

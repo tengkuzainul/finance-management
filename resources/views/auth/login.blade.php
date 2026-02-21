@@ -9,8 +9,8 @@
             <!-- Logo & Header -->
             <div class="text-center mb-8">
                 <div
-                    class="w-20 h-20 bg-linear-to-br from-orange-500 to-orange-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-xl shadow-orange-500/30">
-                    <i class="fas fa-utensils text-3xl text-white"></i>
+                    class="w-24 h-24 bg-linear-to-br from-slate-500 to-slate-600 rounded-full flex items-center justify-center mx-auto mb-4 shadow-xl shadow-slate-700/30">
+                    <img src="{{ URL::asset('logo.png') }}" alt="{{ config('app.name') }}" class="w-20 h-20 object-contain">
                 </div>
                 <h1 class="text-2xl font-bold text-slate-800">Kebab Ikhwan</h1>
                 <p class="text-slate-500 text-sm mt-1">Sistem Manajemen Keuangan</p>

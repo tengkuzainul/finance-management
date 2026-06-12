@@ -225,7 +225,7 @@ class DashboardController extends Controller
                     'date' => $laporan->tanggal->diffForHumans(),
                     'tanggal' => $laporan->tanggal->format('d M Y'),
                     'amount' => $laporan->jumlah,
-                    'type' => strtolower($laporan->jenis),
+                    'type' => $laporan->jenis,
                     'status' => $laporan->status,
                 ];
             });

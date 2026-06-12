@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Input Pemasukan')
+@section('title', 'Input Pendapatan')
 
 @section('content')
     <div class="space-y-6">
@@ -11,8 +11,8 @@
                 <i class="fas fa-arrow-left"></i>
             </a>
             <div>
-                <h1 class="text-2xl font-bold text-gray-900">Input Pemasukan</h1>
-                <p class="text-gray-600 mt-1">Catat pemasukan untuk cabang {{ $cabang->nama_cabang }}</p>
+                <h1 class="text-2xl font-bold text-gray-900">Input Pendapatan</h1>
+                <p class="text-gray-600 mt-1">Catat Pendapatan untuk cabang {{ $cabang->nama_cabang }}</p>
             </div>
         </div>
 
@@ -41,8 +41,8 @@
                             <i class="fas fa-arrow-up text-green-600 text-lg"></i>
                         </div>
                         <div>
-                            <h2 class="font-semibold text-green-800">Pemasukan</h2>
-                            <p class="text-sm text-green-600">Catat semua pemasukan usaha</p>
+                            <h2 class="font-semibold text-green-800">Pendapatan</h2>
+                            <p class="text-sm text-green-600">Catat semua Pendapatan usaha</p>
                         </div>
                     </div>
                 </div>
@@ -217,7 +217,7 @@
             spinner.classList.remove('hidden');
             text.textContent = status === 'draft' ? 'Menyimpan...' : 'Mengirim...';
 
-            fetch('{{ route('karyawan.pemasukan.store') }}', {
+            fetch('{{ route('karyawan.Pendapatan.store') }}', {
                     method: 'POST',
                     body: formData,
                     headers: {
@@ -264,3 +264,4 @@
         }
     </script>
 @endpush
+

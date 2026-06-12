@@ -163,7 +163,7 @@ class WhatsAppService
       $message .= "🏪 *Cabang:* {$cabang->nama_cabang}\n";
       $message .= "━━━━━━━━━━━━━━━━━━━━\n\n";
       $message .= "💰 *RINCIAN GAJI*\n";
-      $message .= "• Total Pemasukan: Rp {$totalPemasukan}\n";
+      $message .= "• Total Pendapatan: Rp {$totalPemasukan}\n";
       $message .= "• Persentase Gaji: {$persenGaji}%\n";
       $message .= "• *Nominal Gaji: Rp {$nominalGaji}*\n\n";
       $message .= "━━━━━━━━━━━━━━━━━━━━\n";
@@ -212,3 +212,4 @@ class WhatsAppService
       return $results;
    }
 }
+

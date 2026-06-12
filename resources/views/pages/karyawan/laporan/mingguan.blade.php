@@ -79,7 +79,7 @@
                         <i class="fas fa-arrow-up text-green-600 text-xl"></i>
                     </div>
                     <div class="ml-4">
-                        <p class="text-sm font-medium text-gray-500">Total Pemasukan</p>
+                        <p class="text-sm font-medium text-gray-500">Total Pendapatan</p>
                         <p class="text-xl font-bold text-green-600">Rp
                             {{ number_format($summary['total_pemasukan'], 0, ',', '.') }}</p>
                     </div>
@@ -125,9 +125,9 @@
                         <div class="px-6 py-4 flex items-center justify-between">
                             <div class="flex items-center gap-4">
                                 <div
-                                    class="w-10 h-10 rounded-lg flex items-center justify-center {{ $laporan->jenis == 'Pemasukan' ? 'bg-green-100' : 'bg-red-100' }}">
+                                    class="w-10 h-10 rounded-lg flex items-center justify-center {{ $laporan->jenis == 'Pendapatan' ? 'bg-green-100' : 'bg-red-100' }}">
                                     <i
-                                        class="fas {{ $laporan->jenis == 'Pemasukan' ? 'fa-arrow-up text-green-600' : 'fa-arrow-down text-red-600' }}"></i>
+                                        class="fas {{ $laporan->jenis == 'Pendapatan' ? 'fa-arrow-up text-green-600' : 'fa-arrow-down text-red-600' }}"></i>
                                 </div>
                                 <div>
                                     <p class="font-medium text-gray-900">{{ $laporan->keterangan }}</p>
@@ -136,8 +136,8 @@
                             </div>
                             <div class="text-right">
                                 <p
-                                    class="font-semibold {{ $laporan->jenis == 'Pemasukan' ? 'text-green-600' : 'text-red-600' }}">
-                                    {{ $laporan->jenis == 'Pemasukan' ? '+' : '-' }} Rp
+                                    class="font-semibold {{ $laporan->jenis == 'Pendapatan' ? 'text-green-600' : 'text-red-600' }}">
+                                    {{ $laporan->jenis == 'Pendapatan' ? '+' : '-' }} Rp
                                     {{ number_format($laporan->jumlah, 0, ',', '.') }}
                                 </p>
                                 @php
@@ -168,3 +168,4 @@
         @endforelse
     </div>
 @endsection
+

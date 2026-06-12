@@ -19,7 +19,7 @@ return new class extends Migration
 
          // Periode Laporan
          $table->date('tanggal');
-         $table->enum('jenis', ['Pemasukan', 'Pengeluaran']);
+         $table->enum('jenis', ['Pendapatan', 'Pengeluaran']);
 
          // Detail Transaksi
          $table->string('kategori');
@@ -45,3 +45,4 @@ return new class extends Migration
       Schema::dropIfExists('laporan_keuangans');
    }
 };
+

@@ -36,7 +36,7 @@ class LaporanKeuangan extends Model
    ];
 
    // Konstanta untuk jenis
-   const JENIS_PEMASUKAN = 'Pemasukan';
+   const JENIS_PEMASUKAN = 'Pendapatan';
    const JENIS_PENGELUARAN = 'Pengeluaran';
 
    // Konstanta untuk status
@@ -45,7 +45,7 @@ class LaporanKeuangan extends Model
    const STATUS_APPROVED = 'Approved';
    const STATUS_REJECTED = 'Rejected';
 
-   // Konstanta untuk kategori pemasukan
+   // Konstanta untuk kategori Pendapatan
    const KATEGORI_PEMASUKAN = [
       'Penjualan Tunai',
       'Penjualan Non-Tunai',
@@ -97,11 +97,19 @@ class LaporanKeuangan extends Model
    }
 
    /**
-    * Scope untuk pemasukan
+    * Scope untuk Pendapatan
+    */
+   public function scopePendapatan($query)
+   {
+      return $query->where('jenis', self::JENIS_PEMASUKAN);
+   }
+
+   /**
+    * Alias scope untuk kompatibilitas lama
     */
    public function scopePemasukan($query)
    {
-      return $query->where('jenis', self::JENIS_PEMASUKAN);
+      return $query->pendapatan();
    }
 
    /**
@@ -276,11 +284,11 @@ class LaporanKeuangan extends Model
    }
 
    /**
-    * Get total pemasukan dalam periode
+    * Get total Pendapatan dalam periode
     */
    public static function getTotalPemasukan($startDate = null, $endDate = null, $cabangId = null): float
    {
-      $query = self::pemasukan()->approved();
+      $query = self::Pendapatan()->approved();
 
       if ($startDate && $endDate) {
          $query->periode($startDate, $endDate);
@@ -320,3 +328,4 @@ class LaporanKeuangan extends Model
          - self::getTotalPengeluaran($startDate, $endDate, $cabangId);
    }
 }
+

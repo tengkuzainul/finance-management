@@ -57,7 +57,7 @@
 
     <!-- Stats Cards -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-8">
-        <!-- Total Pemasukan Saya -->
+        <!-- Total Pendapatan Saya -->
         <div
             class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 hover:shadow-lg hover:shadow-slate-200/50 transition-all duration-300">
             <div class="flex items-center justify-between mb-4">
@@ -65,7 +65,7 @@
                     <i class="fas fa-arrow-down text-green-600 text-lg"></i>
                 </div>
             </div>
-            <h3 class="text-slate-500 text-sm font-medium mb-1">Pemasukan Saya</h3>
+            <h3 class="text-slate-500 text-sm font-medium mb-1">Pendapatan Saya</h3>
             <p class="text-2xl font-bold text-slate-800">Rp {{ number_format($stats['total_pemasukan'], 0, ',', '.') }}</p>
             <p class="text-xs text-slate-400 mt-2">Bulan ini</p>
         </div>
@@ -131,9 +131,9 @@
                 @forelse($recentTransactions as $transaction)
                     <div class="p-4 md:p-6 flex items-center gap-4 hover:bg-slate-50 transition-colors">
                         <div
-                            class="w-12 h-12 {{ $transaction['type'] == 'pemasukan' ? 'bg-green-100' : 'bg-red-100' }} rounded-xl flex items-center justify-center shrink-0">
+                            class="w-12 h-12 {{ $transaction['type'] == 'Pendapatan' ? 'bg-green-100' : 'bg-red-100' }} rounded-xl flex items-center justify-center shrink-0">
                             <i
-                                class="fas {{ $transaction['type'] == 'pemasukan' ? 'fa-arrow-down text-green-600' : 'fa-arrow-up text-red-600' }}"></i>
+                                class="fas {{ $transaction['type'] == 'Pendapatan' ? 'fa-arrow-down text-green-600' : 'fa-arrow-up text-red-600' }}"></i>
                         </div>
                         <div class="flex-1 min-w-0">
                             <h3 class="font-semibold text-slate-800 truncate">{{ $transaction['title'] }}</h3>
@@ -141,8 +141,8 @@
                         </div>
                         <div class="text-right">
                             <p
-                                class="font-semibold {{ $transaction['type'] == 'pemasukan' ? 'text-green-600' : 'text-red-600' }}">
-                                {{ $transaction['type'] == 'pemasukan' ? '+' : '-' }}Rp
+                                class="font-semibold {{ $transaction['type'] == 'Pendapatan' ? 'text-green-600' : 'text-red-600' }}">
+                                {{ $transaction['type'] == 'Pendapatan' ? '+' : '-' }}Rp
                                 {{ number_format($transaction['amount'], 0, ',', '.') }}
                             </p>
                             <span
@@ -178,7 +178,7 @@
                         <div class="w-10 h-10 bg-green-500 rounded-xl flex items-center justify-center">
                             <i class="fas fa-plus text-white"></i>
                         </div>
-                        <span class="font-medium text-green-700">Input Pemasukan</span>
+                        <span class="font-medium text-green-700">Input Pendapatan</span>
                     </a>
                     <a href="{{ route('karyawan.gaji.index') }}"
                         class="flex items-center gap-3 p-3 bg-purple-50 hover:bg-purple-100 rounded-xl transition-colors">
@@ -304,3 +304,4 @@
         </div>
     </div>
 @endsection
+

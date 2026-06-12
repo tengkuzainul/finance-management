@@ -53,10 +53,10 @@ class LaporanKeuanganController extends Controller
          $jenis = $request->jenis;
 
          // Check if jenis is encrypted (hashids)
-         if (!in_array($jenis, ['Pemasukan', 'Pengeluaran'])) {
+         if (!in_array($jenis, ['Pendapatan', 'Pengeluaran'])) {
             $decoded = Hashids::decode($jenis);
             if (!empty($decoded)) {
-               $jenis = $decoded[0] == 1 ? 'Pemasukan' : 'Pengeluaran';
+               $jenis = $decoded[0] == 1 ? 'Pendapatan' : 'Pengeluaran';
             }
          }
 
@@ -98,7 +98,7 @@ class LaporanKeuanganController extends Controller
 
       // Summary statistics
       $summary = [
-         'total_pemasukan' => LaporanKeuangan::pemasukan()->approved()->sum('jumlah'),
+         'total_pemasukan' => LaporanKeuangan::Pendapatan()->approved()->sum('jumlah'),
          'total_pengeluaran' => LaporanKeuangan::pengeluaran()->approved()->sum('jumlah'),
          'total_gaji' => Gaji::where('status', 'paid')->sum('nominal_gaji'),
          'pending_count' => LaporanKeuangan::pending()->count(),
@@ -128,12 +128,12 @@ class LaporanKeuanganController extends Controller
       $jenis = LaporanKeuangan::JENIS_PEMASUKAN; // default
       if ($request->filled('jenis')) {
          $jenisMap = [
-            'pemasukan' => LaporanKeuangan::JENIS_PEMASUKAN,
+            'Pendapatan' => LaporanKeuangan::JENIS_PEMASUKAN,
             'pengeluaran' => LaporanKeuangan::JENIS_PENGELUARAN,
          ];
          $decoded = Hashids::decode($request->jenis);
          if (!empty($decoded)) {
-            $jenisKey = $decoded[0] == 1 ? 'pemasukan' : 'pengeluaran';
+            $jenisKey = $decoded[0] == 1 ? 'Pendapatan' : 'pengeluaran';
             $jenis = $jenisMap[$jenisKey] ?? LaporanKeuangan::JENIS_PEMASUKAN;
          }
       }
@@ -177,7 +177,7 @@ class LaporanKeuanganController extends Controller
          'cabang_id' => 'required|exists:cabangs,id',
          'karyawan_id' => 'nullable|exists:karyawans,id',
          'tanggal' => 'required|date',
-         'jenis' => 'required|in:Pemasukan,Pengeluaran',
+         'jenis' => 'required|in:Pendapatan,Pengeluaran',
          'kategori' => 'required|string|max:100',
          'keterangan' => 'required|string|max:500',
          'jumlah' => 'required|numeric|min:0',
@@ -205,7 +205,7 @@ class LaporanKeuanganController extends Controller
 
          // Determine status
          // Untuk pengeluaran admin: auto-approved kecuali save_as_draft dicentang
-         // Untuk pemasukan: sesuai pilihan (Draft/Pending)
+         // Untuk Pendapatan: sesuai pilihan (Draft/Pending)
          $status = LaporanKeuangan::STATUS_DRAFT;
          $approvedBy = null;
          $approvedAt = null;
@@ -220,7 +220,7 @@ class LaporanKeuanganController extends Controller
                $approvedAt = now();
             }
          } else {
-            // Pemasukan: sesuai pilihan user
+            // Pendapatan: sesuai pilihan user
             $status = $validated['status'] ?? LaporanKeuangan::STATUS_DRAFT;
          }
 
@@ -331,7 +331,7 @@ class LaporanKeuanganController extends Controller
          'cabang_id' => 'required|exists:cabangs,id',
          'karyawan_id' => 'nullable|exists:karyawans,id',
          'tanggal' => 'required|date',
-         'jenis' => 'required|in:Pemasukan,Pengeluaran',
+         'jenis' => 'required|in:Pendapatan,Pengeluaran',
          'kategori' => 'required|string|max:100',
          'keterangan' => 'required|string|max:500',
          'jumlah' => 'required|numeric|min:0',
@@ -662,3 +662,4 @@ class LaporanKeuanganController extends Controller
       return $pdf->stream('laporan-keuangan.pdf');
    }
 }
+

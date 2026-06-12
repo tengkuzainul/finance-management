@@ -16,7 +16,7 @@
                     @endif
                 </p>
             </div>
-            <a href="{{ route('karyawan.pemasukan.create') }}"
+            <a href="{{ route('karyawan.Pendapatan.create') }}"
                 class="px-4 py-2 bg-brand-orange text-white rounded-lg hover:bg-orange-600 flex items-center gap-2 w-fit">
                 <i class="fas fa-plus"></i>
                 <span>Input Baru</span>
@@ -201,8 +201,8 @@
                         <i class="fas fa-inbox text-gray-400 text-3xl"></i>
                     </div>
                     <p class="text-gray-500 font-medium">Belum ada input</p>
-                    <p class="text-gray-400 text-sm mt-1">Anda belum membuat input pemasukan</p>
-                    <a href="{{ route('karyawan.pemasukan.create') }}"
+                    <p class="text-gray-400 text-sm mt-1">Anda belum membuat input Pendapatan</p>
+                    <a href="{{ route('karyawan.Pendapatan.create') }}"
                         class="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-brand-orange text-white rounded-lg hover:bg-orange-600">
                         <i class="fas fa-plus"></i>
                         <span>Buat Input Pertama</span>
@@ -410,3 +410,4 @@
         </script>
     @endpush
 @endsection
+

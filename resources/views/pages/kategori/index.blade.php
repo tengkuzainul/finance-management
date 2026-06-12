@@ -21,7 +21,7 @@
     <div class="flex items-center gap-2 mb-6 overflow-x-auto pb-2">
         <button class="px-4 py-2 bg-indigo-500 text-white text-sm font-medium rounded-xl whitespace-nowrap">Semua</button>
         <button
-            class="px-4 py-2 bg-white border border-slate-200 text-slate-600 text-sm font-medium rounded-xl hover:bg-slate-50 whitespace-nowrap transition-colors">Pemasukan</button>
+            class="px-4 py-2 bg-white border border-slate-200 text-slate-600 text-sm font-medium rounded-xl hover:bg-slate-50 whitespace-nowrap transition-colors">Pendapatan</button>
         <button
             class="px-4 py-2 bg-white border border-slate-200 text-slate-600 text-sm font-medium rounded-xl hover:bg-slate-50 whitespace-nowrap transition-colors">Pengeluaran</button>
         <button
@@ -48,7 +48,7 @@
             <h3 class="font-bold text-slate-800 mb-1">Penjualan</h3>
             <p class="text-sm text-slate-500 mb-3">Kategori untuk semua transaksi penjualan</p>
             <div class="flex items-center justify-between">
-                <span class="px-2.5 py-1 bg-green-100 text-green-700 text-xs font-medium rounded-full">Pemasukan</span>
+                <span class="px-2.5 py-1 bg-green-100 text-green-700 text-xs font-medium rounded-full">Pendapatan</span>
                 <span class="text-sm text-slate-500">150 transaksi</span>
             </div>
         </div>
@@ -178,3 +178,4 @@
         </div>
     </div>
 @endsection
+

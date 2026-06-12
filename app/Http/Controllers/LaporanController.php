@@ -48,7 +48,7 @@ class LaporanController extends Controller
       $totalGaji = $gajiQuery->sum('nominal_gaji');
 
       $summary = [
-         'total_pemasukan' => $laporans->where('jenis', 'Pemasukan')->sum('jumlah'),
+         'total_pemasukan' => $laporans->where('jenis', 'Pendapatan')->sum('jumlah'),
          'total_pengeluaran' => $laporans->where('jenis', 'Pengeluaran')->sum('jumlah'),
          'total_gaji' => $totalGaji,
          'jumlah_transaksi' => $laporans->count(),
@@ -115,7 +115,7 @@ class LaporanController extends Controller
       $totalGaji = $gajiQuery->sum('nominal_gaji');
 
       $summary = [
-         'total_pemasukan' => $laporans->where('jenis', 'Pemasukan')->sum('jumlah'),
+         'total_pemasukan' => $laporans->where('jenis', 'Pendapatan')->sum('jumlah'),
          'total_pengeluaran' => $laporans->where('jenis', 'Pengeluaran')->sum('jumlah'),
          'total_gaji' => $totalGaji,
          'jumlah_transaksi' => $laporans->count(),
@@ -182,9 +182,9 @@ class LaporanController extends Controller
          if ($weekLaporans->isNotEmpty()) {
             $weeklyStats->push([
                'minggu' => $week,
-               'pemasukan' => $weekLaporans->where('jenis', 'Pemasukan')->sum('jumlah'),
+               'Pendapatan' => $weekLaporans->where('jenis', 'Pendapatan')->sum('jumlah'),
                'pengeluaran' => $weekLaporans->where('jenis', 'Pengeluaran')->sum('jumlah'),
-               'saldo' => $weekLaporans->where('jenis', 'Pemasukan')->sum('jumlah') - $weekLaporans->where('jenis', 'Pengeluaran')->sum('jumlah'),
+               'saldo' => $weekLaporans->where('jenis', 'Pendapatan')->sum('jumlah') - $weekLaporans->where('jenis', 'Pengeluaran')->sum('jumlah'),
                'transaksi' => $weekLaporans->count(),
             ]);
          }
@@ -195,15 +195,15 @@ class LaporanController extends Controller
          $cabang = $items->first()->cabang;
          return [
             'cabang' => $cabang,
-            'pemasukan' => $items->where('jenis', 'Pemasukan')->sum('jumlah'),
+            'Pendapatan' => $items->where('jenis', 'Pendapatan')->sum('jumlah'),
             'pengeluaran' => $items->where('jenis', 'Pengeluaran')->sum('jumlah'),
-            'saldo' => $items->where('jenis', 'Pemasukan')->sum('jumlah') - $items->where('jenis', 'Pengeluaran')->sum('jumlah'),
+            'saldo' => $items->where('jenis', 'Pendapatan')->sum('jumlah') - $items->where('jenis', 'Pengeluaran')->sum('jumlah'),
             'transaksi' => $items->count(),
          ];
       });
 
       $summary = [
-         'total_pemasukan' => $laporans->where('jenis', 'Pemasukan')->sum('jumlah'),
+         'total_pemasukan' => $laporans->where('jenis', 'Pendapatan')->sum('jumlah'),
          'total_pengeluaran' => $laporans->where('jenis', 'Pengeluaran')->sum('jumlah'),
          'jumlah_transaksi' => $laporans->count(),
       ];
@@ -231,3 +231,4 @@ class LaporanController extends Controller
       ));
    }
 }
+

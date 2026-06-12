@@ -204,9 +204,9 @@
                                     <div class="flex items-center gap-4">
                                         <div
                                             class="w-10 h-10 rounded-lg flex items-center justify-center
-                                {{ $laporan->jenis == 'Pemasukan' ? 'bg-green-100' : 'bg-red-100' }}">
+                                {{ $laporan->jenis == 'Pendapatan' ? 'bg-green-100' : 'bg-red-100' }}">
                                             <i
-                                                class="fas {{ $laporan->jenis == 'Pemasukan' ? 'fa-arrow-up text-green-600' : 'fa-arrow-down text-red-600' }}"></i>
+                                                class="fas {{ $laporan->jenis == 'Pendapatan' ? 'fa-arrow-up text-green-600' : 'fa-arrow-down text-red-600' }}"></i>
                                         </div>
                                         <div>
                                             <p class="font-medium text-gray-900">{{ $laporan->keterangan }}</p>
@@ -216,8 +216,8 @@
                                     </div>
                                     <div class="text-right">
                                         <p
-                                            class="font-semibold {{ $laporan->jenis == 'Pemasukan' ? 'text-green-600' : 'text-red-600' }}">
-                                            {{ $laporan->jenis == 'Pemasukan' ? '+' : '-' }}
+                                            class="font-semibold {{ $laporan->jenis == 'Pendapatan' ? 'text-green-600' : 'text-red-600' }}">
+                                            {{ $laporan->jenis == 'Pendapatan' ? '+' : '-' }}
                                             {{ $laporan->formatted_jumlah }}
                                         </p>
                                         <span
@@ -280,3 +280,4 @@
         }
     </script>
 @endpush
+

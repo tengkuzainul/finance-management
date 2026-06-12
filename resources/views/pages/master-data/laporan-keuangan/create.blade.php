@@ -25,18 +25,18 @@
                 <div class="bg-white rounded-xl shadow-sm border border-gray-100">
                     <!-- Header dengan warna sesuai jenis -->
                     <div
-                        class="px-6 py-4 border-b border-gray-100 {{ $jenis == 'Pemasukan' ? 'bg-green-50' : 'bg-red-50' }} rounded-t-xl">
+                        class="px-6 py-4 border-b border-gray-100 {{ $jenis == 'Pendapatan' ? 'bg-green-50' : 'bg-red-50' }} rounded-t-xl">
                         <div class="flex items-center gap-3">
                             <div
-                                class="w-10 h-10 rounded-lg {{ $jenis == 'Pemasukan' ? 'bg-green-100' : 'bg-red-100' }} flex items-center justify-center">
+                                class="w-10 h-10 rounded-lg {{ $jenis == 'Pendapatan' ? 'bg-green-100' : 'bg-red-100' }} flex items-center justify-center">
                                 <i
-                                    class="fas {{ $jenis == 'Pemasukan' ? 'fa-arrow-up text-green-600' : 'fa-arrow-down text-red-600' }} text-lg"></i>
+                                    class="fas {{ $jenis == 'Pendapatan' ? 'fa-arrow-up text-green-600' : 'fa-arrow-down text-red-600' }} text-lg"></i>
                             </div>
                             <div>
-                                <h2 class="font-semibold {{ $jenis == 'Pemasukan' ? 'text-green-800' : 'text-red-800' }}">
+                                <h2 class="font-semibold {{ $jenis == 'Pendapatan' ? 'text-green-800' : 'text-red-800' }}">
                                     {{ $jenis }}</h2>
-                                <p class="text-sm {{ $jenis == 'Pemasukan' ? 'text-green-600' : 'text-red-600' }}">
-                                    {{ $jenis == 'Pemasukan' ? 'Catat semua pemasukan usaha' : 'Catat semua pengeluaran usaha' }}
+                                <p class="text-sm {{ $jenis == 'Pendapatan' ? 'text-green-600' : 'text-red-600' }}">
+                                    {{ $jenis == 'Pendapatan' ? 'Catat semua Pendapatan usaha' : 'Catat semua pengeluaran usaha' }}
                                 </p>
                             </div>
                         </div>
@@ -180,7 +180,7 @@
                                     Pengeluaran akan langsung disetujui jika tidak dicentang
                                 </p>
                             @else
-                                {{-- Untuk pemasukan: pilihan draft atau pending --}}
+                                {{-- Untuk Pendapatan: pilihan draft atau pending --}}
                                 <div class="flex gap-4">
                                     <label class="flex items-center gap-2 cursor-pointer">
                                         <input type="radio" name="status" value="Draft" checked
@@ -207,7 +207,7 @@
                             Batal
                         </a>
                         <button type="submit" id="btnSubmit"
-                            class="px-6 py-2.5 {{ $jenis == 'Pemasukan' ? 'bg-green-600 hover:bg-green-700' : 'bg-red-600 hover:bg-red-700' }} text-white font-medium rounded-lg transition-colors inline-flex items-center gap-2">
+                            class="px-6 py-2.5 {{ $jenis == 'Pendapatan' ? 'bg-green-600 hover:bg-green-700' : 'bg-red-600 hover:bg-red-700' }} text-white font-medium rounded-lg transition-colors inline-flex items-center gap-2">
                             <i class="fas fa-save"></i>
                             <span>Simpan</span>
                             <i class="fas fa-spinner fa-spin" id="spinner" style="display: none;"></i>
@@ -315,3 +315,4 @@
         });
     </script>
 @endpush
+

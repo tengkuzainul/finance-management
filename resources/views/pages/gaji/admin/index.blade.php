@@ -6,7 +6,7 @@
     <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
             <h1 class="text-2xl md:text-3xl font-bold text-slate-800">Data Penggajian</h1>
-            <p class="text-slate-500 mt-1">Kelola data gaji karyawan berdasarkan pemasukan harian</p>
+            <p class="text-slate-500 mt-1">Kelola data gaji karyawan berdasarkan Pendapatan harian</p>
         </div>
         <div class="flex items-center gap-3">
             <button onclick="openGenerateModal()"
@@ -148,7 +148,7 @@
                             <th class="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">
                                 Cabang</th>
                             <th class="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">
-                                Total Pemasukan</th>
+                                Total Pendapatan</th>
                             <th class="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">
                                 Persen</th>
                             <th class="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">
@@ -457,3 +457,4 @@
         });
     </script>
 @endpush
+

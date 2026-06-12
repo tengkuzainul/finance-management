@@ -33,7 +33,7 @@ class PengaturanController extends Controller
             'nama' => 'Persentase Gaji Karyawan',
             'nilai' => '13',
             'tipe' => 'number',
-            'deskripsi' => 'Persentase gaji harian karyawan dari total pemasukan yang diapprove',
+            'deskripsi' => 'Persentase gaji harian karyawan dari total Pendapatan yang diapprove',
             'is_active' => true,
          ]);
       }
@@ -62,7 +62,7 @@ class PengaturanController extends Controller
          $persenGaji->kode = 'persen_gaji';
          $persenGaji->nama = 'Persentase Gaji Karyawan';
          $persenGaji->tipe = 'number';
-         $persenGaji->deskripsi = 'Persentase gaji harian karyawan dari total pemasukan yang diapprove';
+         $persenGaji->deskripsi = 'Persentase gaji harian karyawan dari total Pendapatan yang diapprove';
          $persenGaji->is_active = true;
       }
 
@@ -235,3 +235,4 @@ class PengaturanController extends Controller
       return response()->json(['success' => true, 'message' => 'Lampiran berhasil dihapus']);
    }
 }
+

@@ -1,23 +1,23 @@
 @extends('layouts.app')
 
-@section('title', 'Tambah Pemasukan')
+@section('title', 'Tambah Pendapatan')
 
 @section('page-header')
     <div class="flex items-center gap-4">
-        <a href="{{ route('pemasukan.index') }}"
+        <a href="{{ route('Pendapatan.index') }}"
             class="w-10 h-10 bg-white border border-slate-200 rounded-xl flex items-center justify-center text-slate-600 hover:bg-slate-50 transition-colors">
             <i class="fas fa-arrow-left"></i>
         </a>
         <div>
-            <h1 class="text-2xl md:text-3xl font-bold text-slate-800">Tambah Pemasukan</h1>
-            <p class="text-slate-500 mt-1">Catat transaksi pemasukan baru</p>
+            <h1 class="text-2xl md:text-3xl font-bold text-slate-800">Tambah Pendapatan</h1>
+            <p class="text-slate-500 mt-1">Catat transaksi Pendapatan baru</p>
         </div>
     </div>
 @endsection
 
 @section('content')
     <div class="max-w-3xl">
-        <form id="pemasukanForm" action="{{ route('pemasukan.store') }}" method="POST" enctype="multipart/form-data"
+        <form id="pemasukanForm" action="{{ route('Pendapatan.store') }}" method="POST" enctype="multipart/form-data"
             class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
             @csrf
             <div class="p-6 md:p-8 space-y-6">
@@ -97,7 +97,7 @@
                             Rp
                         </div>
                     </div>
-                    <p class="mt-2 text-sm text-slate-500">Masukkan jumlah pemasukan tanpa titik atau koma</p>
+                    <p class="mt-2 text-sm text-slate-500">Masukkan jumlah Pendapatan tanpa titik atau koma</p>
                 </div>
 
                 <!-- Catatan -->
@@ -133,7 +133,7 @@
                 <button type="button" onclick="confirmSubmit()"
                     class="px-6 py-2.5 bg-linear-to-r from-green-500 to-green-600 text-white text-sm font-medium rounded-xl hover:from-green-600 hover:to-green-700 shadow-lg shadow-green-500/30 transition-all duration-200 flex items-center gap-2">
                     <i class="fas fa-save"></i>
-                    <span>Simpan Pemasukan</span>
+                    <span>Simpan Pendapatan</span>
                 </button>
             </div>
         </form>
@@ -154,7 +154,7 @@
                     'Batalkan Pengisian?'
                 ).then((result) => {
                     if (result.isConfirmed) {
-                        window.location.href = '{{ route('pemasukan.index') }}';
+                        window.location.href = '{{ route('Pendapatan.index') }}';
                     }
                 });
             }
@@ -180,7 +180,7 @@
                 }
 
                 if (!jumlah || parseInt(jumlah) <= 0) {
-                    SwalHelper.warning('Silakan isi jumlah pemasukan yang valid.');
+                    SwalHelper.warning('Silakan isi jumlah Pendapatan yang valid.');
                     document.getElementById('jumlah').focus();
                     return;
                 }
@@ -193,7 +193,7 @@
                 }).format(jumlah);
 
                 SwalHelper.confirm(
-                    `Simpan pemasukan sebesar ${formattedJumlah}?`,
+                    `Simpan Pendapatan sebesar ${formattedJumlah}?`,
                     'Konfirmasi Simpan'
                 ).then((result) => {
                     if (result.isConfirmed) {
@@ -207,13 +207,13 @@
                             Swal.fire({
                                 icon: 'success',
                                 title: 'Berhasil!',
-                                text: 'Data pemasukan berhasil disimpan.',
+                                text: 'Data Pendapatan berhasil disimpan.',
                                 confirmButtonColor: '#22c55e',
                                 timer: 2000,
                                 timerProgressBar: true,
                                 showConfirmButton: false
                             }).then(() => {
-                                window.location.href = '{{ route('pemasukan.index') }}';
+                                window.location.href = '{{ route('Pendapatan.index') }}';
                             });
                         }, 1000);
                     }
@@ -222,3 +222,4 @@
         </script>
     @endpush
 @endsection
+

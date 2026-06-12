@@ -60,7 +60,7 @@
                 <div class="p-6">
                     <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
                         <div class="p-4 bg-slate-50 rounded-xl">
-                            <p class="text-sm text-slate-500 mb-1">Total Pemasukan</p>
+                            <p class="text-sm text-slate-500 mb-1">Total Pendapatan</p>
                             <p class="text-lg font-bold text-slate-800">Rp
                                 {{ number_format($gaji->total_pemasukan, 0, ',', '.') }}</p>
                         </div>
@@ -83,7 +83,7 @@
             <!-- Detail Transaksi -->
             <div class="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
                 <div class="p-6 border-b border-slate-100">
-                    <h3 class="text-lg font-bold text-slate-800">Detail Transaksi Pemasukan</h3>
+                    <h3 class="text-lg font-bold text-slate-800">Detail Transaksi Pendapatan</h3>
                     <p class="text-sm text-slate-500">Laporan yang di-approve pada tanggal
                         {{ $gaji->tanggal->format('d M Y') }}</p>
                 </div>
@@ -119,7 +119,7 @@
                         </tbody>
                         <tfoot class="bg-slate-50">
                             <tr>
-                                <td colspan="3" class="px-6 py-4 text-right font-bold text-slate-700">Total Pemasukan:
+                                <td colspan="3" class="px-6 py-4 text-right font-bold text-slate-700">Total Pendapatan:
                                 </td>
                                 <td class="px-6 py-4 text-right font-bold text-emerald-600">Rp
                                     {{ number_format($gaji->total_pemasukan, 0, ',', '.') }}</td>
@@ -223,7 +223,7 @@
                 <div class="p-6">
                     <div class="space-y-3 text-sm">
                         <div class="flex justify-between">
-                            <span class="text-slate-500">Total Pemasukan</span>
+                            <span class="text-slate-500">Total Pendapatan</span>
                             <span class="text-slate-700">Rp
                                 {{ number_format($gaji->total_pemasukan, 0, ',', '.') }}</span>
                         </div>
@@ -242,3 +242,4 @@
         </div>
     </div>
 @endsection
+

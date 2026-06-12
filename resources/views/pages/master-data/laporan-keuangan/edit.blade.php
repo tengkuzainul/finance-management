@@ -25,20 +25,20 @@
 
                 <div class="bg-white rounded-xl shadow-sm border border-gray-100">
                     <div
-                        class="px-6 py-4 border-b border-gray-100 {{ $laporanKeuangan->jenis == 'Pemasukan' ? 'bg-green-50' : 'bg-red-50' }} rounded-t-xl">
+                        class="px-6 py-4 border-b border-gray-100 {{ $laporanKeuangan->jenis == 'Pendapatan' ? 'bg-green-50' : 'bg-red-50' }} rounded-t-xl">
                         <div class="flex items-center gap-3">
                             <div
-                                class="w-10 h-10 rounded-lg {{ $laporanKeuangan->jenis == 'Pemasukan' ? 'bg-green-100' : 'bg-red-100' }} flex items-center justify-center">
+                                class="w-10 h-10 rounded-lg {{ $laporanKeuangan->jenis == 'Pendapatan' ? 'bg-green-100' : 'bg-red-100' }} flex items-center justify-center">
                                 <i
-                                    class="fas {{ $laporanKeuangan->jenis == 'Pemasukan' ? 'fa-arrow-up text-green-600' : 'fa-arrow-down text-red-600' }} text-lg"></i>
+                                    class="fas {{ $laporanKeuangan->jenis == 'Pendapatan' ? 'fa-arrow-up text-green-600' : 'fa-arrow-down text-red-600' }} text-lg"></i>
                             </div>
                             <div>
                                 <h2
-                                    class="font-semibold {{ $laporanKeuangan->jenis == 'Pemasukan' ? 'text-green-800' : 'text-red-800' }}">
+                                    class="font-semibold {{ $laporanKeuangan->jenis == 'Pendapatan' ? 'text-green-800' : 'text-red-800' }}">
                                     {{ $laporanKeuangan->jenis }}
                                 </h2>
                                 <p
-                                    class="text-sm {{ $laporanKeuangan->jenis == 'Pemasukan' ? 'text-green-600' : 'text-red-600' }}">
+                                    class="text-sm {{ $laporanKeuangan->jenis == 'Pendapatan' ? 'text-green-600' : 'text-red-600' }}">
                                     Dibuat: {{ $laporanKeuangan->created_at->format('d M Y H:i') }}
                                 </p>
                             </div>
@@ -251,3 +251,4 @@
         });
     </script>
 @endpush
+

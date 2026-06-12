@@ -1,12 +1,12 @@
 @extends('layouts.app')
 
-@section('title', 'Pemasukan')
+@section('title', 'Pendapatan')
 
 @section('page-header')
     <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
         <div>
-            <h1 class="text-2xl md:text-3xl font-bold text-slate-800">Pemasukan</h1>
-            <p class="text-slate-500 mt-1">Kelola semua data pemasukan usaha Anda</p>
+            <h1 class="text-2xl md:text-3xl font-bold text-slate-800">Pendapatan</h1>
+            <p class="text-slate-500 mt-1">Kelola semua data Pendapatan usaha Anda</p>
         </div>
         <div class="flex items-center gap-3">
             <button
@@ -14,10 +14,10 @@
                 <i class="fas fa-filter"></i>
                 <span>Filter</span>
             </button>
-            <a href="{{ route('pemasukan.create') }}"
+            <a href="{{ route('Pendapatan.create') }}"
                 class="flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-green-500 to-green-600 text-white text-sm font-medium rounded-xl hover:from-green-600 hover:to-green-700 shadow-lg shadow-green-500/30 transition-all duration-200">
                 <i class="fas fa-plus"></i>
-                <span>Tambah Pemasukan</span>
+                <span>Tambah Pendapatan</span>
             </a>
         </div>
     </div>
@@ -241,3 +241,4 @@
         </div>
     </div>
 @endsection
+

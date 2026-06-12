@@ -95,7 +95,7 @@
                         <i class="fas fa-arrow-up text-green-600 text-xl"></i>
                     </div>
                     <div class="ml-4">
-                        <p class="text-sm font-medium text-gray-500">Total Pemasukan</p>
+                        <p class="text-sm font-medium text-gray-500">Total Pendapatan</p>
                         <p class="text-xl font-bold text-green-600">Rp
                             {{ number_format($summary['total_pemasukan'], 0, ',', '.') }}</p>
                     </div>
@@ -164,7 +164,7 @@
                                 <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Cabang</th>
                                 <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                                    Pemasukan</th>
+                                    Pendapatan</th>
                                 <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Pengeluaran</th>
                                 <th class="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
@@ -178,9 +178,9 @@
                             @foreach ($groupedByCabang as $cabangId => $items)
                                 @php
                                     $cabang = $items->first()->cabang;
-                                    $pemasukan = $items->where('jenis', 'Pemasukan')->sum('jumlah');
+                                    $Pendapatan = $items->where('jenis', 'Pendapatan')->sum('jumlah');
                                     $pengeluaran = $items->where('jenis', 'Pengeluaran')->sum('jumlah');
-                                    $saldo = $pemasukan - $pengeluaran;
+                                    $saldo = $Pendapatan - $pengeluaran;
                                 @endphp
                                 <tr class="hover:bg-gray-50">
                                     <td class="px-6 py-4 whitespace-nowrap">
@@ -197,7 +197,7 @@
                                         </div>
                                     </td>
                                     <td class="px-6 py-4 text-sm text-right text-green-600 font-medium">
-                                        Rp {{ number_format($pemasukan, 0, ',', '.') }}
+                                        Rp {{ number_format($Pendapatan, 0, ',', '.') }}
                                     </td>
                                     <td class="px-6 py-4 text-sm text-right text-red-600 font-medium">
                                         Rp {{ number_format($pengeluaran, 0, ',', '.') }}
@@ -269,9 +269,9 @@
                                     </td>
                                     <td class="px-6 py-4 whitespace-nowrap">
                                         <span
-                                            class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $laporan->jenis == 'Pemasukan' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
+                                            class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium {{ $laporan->jenis == 'Pendapatan' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
                                             <i
-                                                class="fas {{ $laporan->jenis == 'Pemasukan' ? 'fa-arrow-up' : 'fa-arrow-down' }} mr-1"></i>
+                                                class="fas {{ $laporan->jenis == 'Pendapatan' ? 'fa-arrow-up' : 'fa-arrow-down' }} mr-1"></i>
                                             {{ $laporan->jenis }}
                                         </span>
                                     </td>
@@ -280,8 +280,8 @@
                                     <td class="px-6 py-4 text-sm text-gray-600">{{ Str::limit($laporan->keterangan, 30) }}
                                     </td>
                                     <td
-                                        class="px-6 py-4 whitespace-nowrap text-sm text-right font-medium {{ $laporan->jenis == 'Pemasukan' ? 'text-green-600' : 'text-red-600' }}">
-                                        {{ $laporan->jenis == 'Pemasukan' ? '+' : '-' }} Rp
+                                        class="px-6 py-4 whitespace-nowrap text-sm text-right font-medium {{ $laporan->jenis == 'Pendapatan' ? 'text-green-600' : 'text-red-600' }}">
+                                        {{ $laporan->jenis == 'Pendapatan' ? '+' : '-' }} Rp
                                         {{ number_format($laporan->jumlah, 0, ',', '.') }}
                                     </td>
                                 </tr>
@@ -301,3 +301,4 @@
         @endforelse
     </div>
 @endsection
+

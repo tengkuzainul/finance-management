@@ -85,7 +85,7 @@
             width: 33.33%;
         }
 
-        .summary .pemasukan {
+        .summary .Pendapatan {
             background-color: #dcfce7;
             border-radius: 5px 0 0 5px;
         }
@@ -105,7 +105,7 @@
             margin-top: 5px;
         }
 
-        .summary .pemasukan .amount {
+        .summary .Pendapatan .amount {
             color: #16a34a;
         }
 
@@ -158,7 +158,7 @@
             text-align: center;
         }
 
-        .pemasukan-text {
+        .Pendapatan-text {
             color: #16a34a;
         }
 
@@ -174,7 +174,7 @@
             font-weight: bold;
         }
 
-        .badge-pemasukan {
+        .badge-Pendapatan {
             background-color: #dcfce7;
             color: #16a34a;
         }
@@ -284,8 +284,8 @@
         <div class="summary">
             <table>
                 <tr>
-                    <td class="pemasukan">
-                        <div>Total Pemasukan</div>
+                    <td class="Pendapatan">
+                        <div>Total Pendapatan</div>
                         <div class="amount">Rp {{ number_format($summary['total_pemasukan'], 0, ',', '.') }}</div>
                     </td>
                     <td class="pengeluaran">
@@ -328,13 +328,13 @@
                             <td>{{ $laporan->cabang->nama_cabang ?? '-' }}</td>
                             <td class="text-center">
                                 <span
-                                    class="badge {{ $laporan->jenis == 'Pemasukan' ? 'badge-pemasukan' : 'badge-pengeluaran' }}">
+                                    class="badge {{ $laporan->jenis == 'Pendapatan' ? 'badge-Pendapatan' : 'badge-pengeluaran' }}">
                                     {{ $laporan->jenis }}
                                 </span>
                             </td>
                             <td
-                                class="text-right {{ $laporan->jenis == 'Pemasukan' ? 'pemasukan-text' : 'pengeluaran-text' }}">
-                                {{ $laporan->jenis == 'Pemasukan' ? '+' : '-' }} Rp
+                                class="text-right {{ $laporan->jenis == 'Pendapatan' ? 'Pendapatan-text' : 'pengeluaran-text' }}">
+                                {{ $laporan->jenis == 'Pendapatan' ? '+' : '-' }} Rp
                                 {{ number_format($laporan->jumlah, 0, ',', '.') }}
                             </td>
                         </tr>
@@ -345,10 +345,10 @@
                         <td colspan="6" class="text-right" style="padding: 10px;">Total:</td>
                         <td class="text-right" style="padding: 10px;">
                             @php
-                                $totalPemasukan = $laporans->where('jenis', 'Pemasukan')->sum('jumlah');
+                                $totalPemasukan = $laporans->where('jenis', 'Pendapatan')->sum('jumlah');
                                 $totalPengeluaran = $laporans->where('jenis', 'Pengeluaran')->sum('jumlah');
                             @endphp
-                            <div class="pemasukan-text">+ Rp {{ number_format($totalPemasukan, 0, ',', '.') }}</div>
+                            <div class="Pendapatan-text">+ Rp {{ number_format($totalPemasukan, 0, ',', '.') }}</div>
                             <div class="pengeluaran-text">- Rp {{ number_format($totalPengeluaran, 0, ',', '.') }}
                             </div>
                         </td>
@@ -388,3 +388,4 @@
 </body>
 
 </html>
+

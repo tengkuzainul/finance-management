@@ -101,8 +101,8 @@ class GajiController extends Controller
          }
       }
 
-      // Get all approved pemasukan for that date, grouped by karyawan
-      $query = LaporanKeuangan::where('jenis', 'Pemasukan')
+      // Get all approved Pendapatan for that date, grouped by karyawan
+      $query = LaporanKeuangan::where('jenis', 'Pendapatan')
          ->where('status', 'Approved')
          ->whereDate('tanggal', $tanggal);
 
@@ -269,7 +269,7 @@ class GajiController extends Controller
 
       // Get related laporan keuangan for that day
       $laporans = LaporanKeuangan::where('karyawan_id', $gaji->karyawan_id)
-         ->where('jenis', 'Pemasukan')
+         ->where('jenis', 'Pendapatan')
          ->where('status', 'Approved')
          ->whereDate('tanggal', $gaji->tanggal)
          ->get();
@@ -291,7 +291,7 @@ class GajiController extends Controller
 
       // Get related laporan keuangan
       $laporans = LaporanKeuangan::where('karyawan_id', $gaji->karyawan_id)
-         ->where('jenis', 'Pemasukan')
+         ->where('jenis', 'Pendapatan')
          ->where('status', 'Approved')
          ->whereDate('tanggal', $gaji->tanggal)
          ->get();
@@ -425,7 +425,7 @@ class GajiController extends Controller
 
       // Get related laporan keuangan
       $laporans = LaporanKeuangan::where('karyawan_id', $karyawan->id)
-         ->where('jenis', 'Pemasukan')
+         ->where('jenis', 'Pendapatan')
          ->where('status', 'Approved')
          ->whereDate('tanggal', $gaji->tanggal)
          ->get();
@@ -456,7 +456,7 @@ class GajiController extends Controller
 
       // Get related laporan keuangan
       $laporans = LaporanKeuangan::where('karyawan_id', $karyawan->id)
-         ->where('jenis', 'Pemasukan')
+         ->where('jenis', 'Pendapatan')
          ->where('status', 'Approved')
          ->whereDate('tanggal', $gaji->tanggal)
          ->get();
@@ -474,3 +474,4 @@ class GajiController extends Controller
       return $pdf->download($filename);
    }
 }
+

@@ -285,7 +285,7 @@
         </div>
 
         <!-- Detail Transaksi -->
-        <div class="section-title">Detail Transaksi Pemasukan</div>
+        <div class="section-title">Detail Transaksi Pendapatan</div>
         <table class="data-table">
             <thead>
                 <tr>
@@ -313,7 +313,7 @@
             </tbody>
             <tfoot>
                 <tr>
-                    <td colspan="4" style="text-align: right;">Total Pemasukan:</td>
+                    <td colspan="4" style="text-align: right;">Total Pendapatan:</td>
                     <td>Rp {{ number_format($gaji->total_pemasukan, 0, ',', '.') }}</td>
                 </tr>
             </tfoot>
@@ -323,7 +323,7 @@
         <div class="calculation">
             <table>
                 <tr>
-                    <td>Total Pemasukan</td>
+                    <td>Total Pendapatan</td>
                     <td>Rp {{ number_format($gaji->total_pemasukan, 0, ',', '.') }}</td>
                 </tr>
                 <tr>
@@ -393,3 +393,4 @@
 </body>
 
 </html>
+

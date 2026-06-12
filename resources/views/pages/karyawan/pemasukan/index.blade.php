@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Pemasukan Saya')
+@section('title', 'Pendapatan Saya')
 
 @section('content')
     <div class="space-y-6">
@@ -12,14 +12,14 @@
                     <i class="fas fa-arrow-left"></i>
                 </a>
                 <div>
-                    <h1 class="text-2xl font-bold text-gray-900">Pemasukan Saya</h1>
-                    <p class="text-gray-600 mt-1">Riwayat pemasukan yang pernah Anda input</p>
+                    <h1 class="text-2xl font-bold text-gray-900">Pendapatan Saya</h1>
+                    <p class="text-gray-600 mt-1">Riwayat Pendapatan yang pernah Anda input</p>
                 </div>
             </div>
-            <a href="{{ route('karyawan.pemasukan.create') }}"
+            <a href="{{ route('karyawan.Pendapatan.create') }}"
                 class="inline-flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-green-500 to-green-600 text-white text-sm font-medium rounded-xl hover:from-green-600 hover:to-green-700 shadow-lg shadow-green-500/30 transition-all duration-200">
                 <i class="fas fa-plus"></i>
-                <span>Input Pemasukan</span>
+                <span>Input Pendapatan</span>
             </a>
         </div>
 
@@ -79,7 +79,7 @@
                         <i class="fas fa-wallet text-green-600 text-xl"></i>
                     </div>
                     <div>
-                        <p class="text-sm text-green-600">Total Pemasukan Approved</p>
+                        <p class="text-sm text-green-600">Total Pendapatan Approved</p>
                         <p class="text-2xl font-bold text-green-800">Rp
                             {{ number_format($summary['total_nilai'], 0, ',', '.') }}</p>
                     </div>
@@ -127,7 +127,7 @@
                         class="flex-1 px-4 py-2 bg-green-500 text-white text-sm font-medium rounded-lg hover:bg-green-600 transition-colors">
                         <i class="fas fa-filter mr-1"></i> Filter
                     </button>
-                    <a href="{{ route('karyawan.pemasukan.index') }}"
+                    <a href="{{ route('karyawan.Pendapatan.index') }}"
                         class="px-4 py-2 bg-slate-100 text-slate-600 text-sm font-medium rounded-lg hover:bg-slate-200 transition-colors">
                         <i class="fas fa-times"></i>
                     </a>
@@ -207,15 +207,16 @@
                     <div class="w-16 h-16 mx-auto mb-4 bg-slate-100 rounded-full flex items-center justify-center">
                         <i class="fas fa-inbox text-slate-400 text-2xl"></i>
                     </div>
-                    <h3 class="text-lg font-medium text-slate-800 mb-1">Belum ada pemasukan</h3>
-                    <p class="text-slate-500 mb-4">Mulai input pemasukan pertama Anda</p>
-                    <a href="{{ route('karyawan.pemasukan.create') }}"
+                    <h3 class="text-lg font-medium text-slate-800 mb-1">Belum ada Pendapatan</h3>
+                    <p class="text-slate-500 mb-4">Mulai input Pendapatan pertama Anda</p>
+                    <a href="{{ route('karyawan.Pendapatan.create') }}"
                         class="inline-flex items-center gap-2 px-4 py-2 bg-green-500 text-white text-sm font-medium rounded-lg hover:bg-green-600 transition-colors">
                         <i class="fas fa-plus"></i>
-                        <span>Input Pemasukan</span>
+                        <span>Input Pendapatan</span>
                     </a>
                 </div>
             @endif
         </div>
     </div>
 @endsection
+

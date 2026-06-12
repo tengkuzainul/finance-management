@@ -26,7 +26,7 @@
 @section('content')
     <!-- Stats Cards -->
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-8">
-        <!-- Total Pemasukan -->
+        <!-- Total Pendapatan -->
         <div
             class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 hover:shadow-lg hover:shadow-slate-200/50 transition-all duration-300">
             <div class="flex items-center justify-between mb-4">
@@ -42,7 +42,7 @@
                     </span>
                 @endif
             </div>
-            <h3 class="text-slate-500 text-sm font-medium mb-1">Total Pemasukan</h3>
+            <h3 class="text-slate-500 text-sm font-medium mb-1">Total Pendapatan</h3>
             <p class="text-2xl font-bold text-slate-800">Rp {{ number_format($stats['total_pemasukan'], 0, ',', '.') }}</p>
             <p class="text-xs text-slate-400 mt-2">Bulan ini</p>
         </div>
@@ -117,7 +117,7 @@
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-6">
                 <div>
                     <h2 class="text-lg font-bold text-slate-800">Grafik Keuangan</h2>
-                    <p class="text-sm text-slate-500">Pemasukan vs Pengeluaran (7 hari terakhir)</p>
+                    <p class="text-sm text-slate-500">Pendapatan vs Pengeluaran (7 hari terakhir)</p>
                 </div>
             </div>
             <!-- Chart -->
@@ -128,7 +128,7 @@
             <div class="flex items-center justify-center gap-6 mt-4">
                 <div class="flex items-center gap-2">
                     <div class="w-3 h-3 bg-green-500 rounded-full"></div>
-                    <span class="text-sm text-slate-600">Pemasukan</span>
+                    <span class="text-sm text-slate-600">Pendapatan</span>
                 </div>
                 <div class="flex items-center gap-2">
                     <div class="w-3 h-3 bg-red-500 rounded-full"></div>
@@ -153,7 +153,7 @@
                         <div class="flex items-center gap-4 text-xs">
                             <span class="text-green-600">
                                 <i class="fas fa-arrow-down mr-1"></i>
-                                Rp {{ number_format($cabang->pemasukan ?? 0, 0, ',', '.') }}
+                                Rp {{ number_format($cabang->Pendapatan ?? 0, 0, ',', '.') }}
                             </span>
                             <span class="text-red-600">
                                 <i class="fas fa-arrow-up mr-1"></i>
@@ -192,9 +192,9 @@
                 @forelse($recentTransactions as $transaction)
                     <div class="p-4 md:p-6 flex items-center gap-4 hover:bg-slate-50 transition-colors">
                         <div
-                            class="w-12 h-12 {{ $transaction['type'] == 'pemasukan' ? 'bg-green-100' : 'bg-red-100' }} rounded-xl flex items-center justify-center shrink-0">
+                            class="w-12 h-12 {{ $transaction['type'] == 'Pendapatan' ? 'bg-green-100' : 'bg-red-100' }} rounded-xl flex items-center justify-center shrink-0">
                             <i
-                                class="fas {{ $transaction['type'] == 'pemasukan' ? 'fa-arrow-down text-green-600' : 'fa-arrow-up text-red-600' }}"></i>
+                                class="fas {{ $transaction['type'] == 'Pendapatan' ? 'fa-arrow-down text-green-600' : 'fa-arrow-up text-red-600' }}"></i>
                         </div>
                         <div class="flex-1 min-w-0">
                             <h3 class="font-semibold text-slate-800 truncate">{{ $transaction['title'] }}</h3>
@@ -203,8 +203,8 @@
                         </div>
                         <div class="text-right">
                             <p
-                                class="font-semibold {{ $transaction['type'] == 'pemasukan' ? 'text-green-600' : 'text-red-600' }}">
-                                {{ $transaction['type'] == 'pemasukan' ? '+' : '-' }}Rp
+                                class="font-semibold {{ $transaction['type'] == 'Pendapatan' ? 'text-green-600' : 'text-red-600' }}">
+                                {{ $transaction['type'] == 'Pendapatan' ? '+' : '-' }}Rp
                                 {{ number_format($transaction['amount'], 0, ',', '.') }}
                             </p>
                             <span class="text-xs text-slate-400">{{ $transaction['kategori'] }}</span>
@@ -231,7 +231,7 @@
                             class="w-10 h-10 bg-green-500 rounded-xl flex items-center justify-center group-hover:scale-110 transition-transform">
                             <i class="fas fa-plus text-white"></i>
                         </div>
-                        <span class="text-sm font-medium text-green-700">Pemasukan</span>
+                        <span class="text-sm font-medium text-green-700">Pendapatan</span>
                     </a>
                     <a href="{{ route('master-data.laporan-keuangan.create', ['jenis' => Hashids::encode(2)]) }}"
                         class="flex flex-col items-center gap-2 p-4 bg-red-50 hover:bg-red-100 rounded-xl transition-colors group">
@@ -265,7 +265,7 @@
                 <h2 class="font-bold mb-4">Ringkasan Bulan Ini</h2>
                 <div class="space-y-3 text-sm">
                     <div class="flex justify-between">
-                        <span class="text-orange-100">Total Pemasukan</span>
+                        <span class="text-orange-100">Total Pendapatan</span>
                         <span class="font-semibold">Rp {{ number_format($stats['total_pemasukan'], 0, ',', '.') }}</span>
                     </div>
                     <div class="flex justify-between">
@@ -299,8 +299,8 @@
             data: {
                 labels: chartData.map(d => d.day + '\n' + d.date),
                 datasets: [{
-                        label: 'Pemasukan',
-                        data: chartData.map(d => d.pemasukan),
+                        label: 'Pendapatan',
+                        data: chartData.map(d => d.Pendapatan),
                         backgroundColor: 'rgba(34, 197, 94, 0.8)',
                         borderColor: 'rgb(34, 197, 94)',
                         borderWidth: 1,
@@ -345,3 +345,4 @@
         });
     </script>
 @endpush
+

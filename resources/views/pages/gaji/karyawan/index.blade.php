@@ -127,7 +127,7 @@
                         <th class="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Cabang
                         </th>
                         <th class="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Total
-                            Pemasukan</th>
+                            Pendapatan</th>
                         <th class="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">Persen
                         </th>
                         <th class="px-6 py-4 text-left text-xs font-semibold text-slate-500 uppercase tracking-wider">
@@ -205,3 +205,4 @@
         @endif
     </div>
 @endsection
+

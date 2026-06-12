@@ -16,7 +16,7 @@ return new class extends Migration
             $table->foreignId('karyawan_id')->constrained('karyawans')->onDelete('cascade');
             $table->foreignId('cabang_id')->constrained('cabangs')->onDelete('cascade');
             $table->date('tanggal'); // Tanggal gaji (per hari)
-            $table->decimal('total_pemasukan', 15, 2)->default(0); // Total pemasukan hari itu
+            $table->decimal('total_pemasukan', 15, 2)->default(0); // Total Pendapatan hari itu
             $table->decimal('persen_gaji', 5, 2)->default(13); // Persentase gaji saat itu
             $table->decimal('nominal_gaji', 15, 2)->default(0); // Hasil perhitungan gaji
             $table->integer('jumlah_transaksi')->default(0); // Jumlah transaksi yang di-approve
@@ -39,3 +39,4 @@ return new class extends Migration
         Schema::dropIfExists('gajis');
     }
 };
+

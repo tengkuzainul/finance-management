@@ -70,7 +70,7 @@
                         </div>
                         <div>
                             <h3 class="text-lg font-bold text-slate-800">Konfigurasi Persentase Gaji</h3>
-                            <p class="text-sm text-slate-500">Atur persentase gaji harian karyawan dari total pemasukan</p>
+                            <p class="text-sm text-slate-500">Atur persentase gaji harian karyawan dari total Pendapatan</p>
                         </div>
                     </div>
                 </div>
@@ -89,8 +89,8 @@
                                     <ul class="list-disc list-inside space-y-1 text-blue-600">
                                         <li>Gaji karyawan dihitung per hari berdasarkan laporan yang sudah diapprove</li>
                                         <li>Rumus: <span class="font-mono bg-blue-100 px-2 py-0.5 rounded">Gaji = Total
-                                                Pemasukan × (Persentase / 100)</span></li>
-                                        <li>Contoh: Jika pemasukan Rp 1.000.000 dan persentase 13%, maka gaji = Rp 130.000
+                                                Pendapatan × (Persentase / 100)</span></li>
+                                        <li>Contoh: Jika Pendapatan Rp 1.000.000 dan persentase 13%, maka gaji = Rp 130.000
                                         </li>
                                     </ul>
                                 </div>
@@ -352,3 +352,4 @@
         @endif
     </script>
 @endpush
+

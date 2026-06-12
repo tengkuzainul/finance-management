@@ -8,13 +8,13 @@
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
             <div>
                 <h1 class="text-2xl font-bold text-gray-900">Laporan Keuangan</h1>
-                <p class="text-gray-600 mt-1">Kelola laporan pemasukan dan pengeluaran</p>
+                <p class="text-gray-600 mt-1">Kelola laporan Pendapatan dan pengeluaran</p>
             </div>
             <div class="flex items-center gap-2">
                 <a href="{{ route('master-data.laporan-keuangan.create', ['jenis' => Hashids::encode(1)]) }}"
                     class="inline-flex items-center px-4 py-2 bg-green-600 text-white font-semibold rounded-lg hover:bg-green-700 transition-colors shadow-md">
                     <i class="fas fa-plus mr-2"></i>
-                    Pemasukan
+                    Pendapatan
                 </a>
                 <a href="{{ route('master-data.laporan-keuangan.create', ['jenis' => Hashids::encode(2)]) }}"
                     class="inline-flex items-center px-4 py-2 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 transition-colors shadow-md">
@@ -32,7 +32,7 @@
                         <i class="fas fa-arrow-up text-green-600 text-xl"></i>
                     </div>
                     <div class="ml-4">
-                        <p class="text-sm font-medium text-gray-500">Total Pemasukan</p>
+                        <p class="text-sm font-medium text-gray-500">Total Pendapatan</p>
                         <p class="text-xl font-bold text-green-600">Rp
                             {{ number_format($summary['total_pemasukan'], 0, ',', '.') }}</p>
                     </div>
@@ -120,7 +120,7 @@
                         <select name="jenis"
                             class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-brand-orange focus:border-brand-orange">
                             <option value="">Semua Jenis</option>
-                            <option value="Pemasukan" {{ request('jenis') == 'Pemasukan' ? 'selected' : '' }}>Pemasukan
+                            <option value="Pendapatan" {{ request('jenis') == 'Pendapatan' ? 'selected' : '' }}>Pendapatan
                             </option>
                             <option value="Pengeluaran" {{ request('jenis') == 'Pengeluaran' ? 'selected' : '' }}>
                                 Pengeluaran</option>
@@ -220,14 +220,14 @@
                                     <span
                                         class="inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold {{ $laporan->jenis_badge_class }}">
                                         <i
-                                            class="fas {{ $laporan->jenis == 'Pemasukan' ? 'fa-arrow-up' : 'fa-arrow-down' }} mr-1"></i>
+                                            class="fas {{ $laporan->jenis == 'Pendapatan' ? 'fa-arrow-up' : 'fa-arrow-down' }} mr-1"></i>
                                         {{ $laporan->jenis }}
                                     </span>
                                 </td>
                                 <td class="px-6 py-4 text-right">
                                     <span
-                                        class="font-semibold {{ $laporan->jenis == 'Pemasukan' ? 'text-green-600' : 'text-red-600' }}">
-                                        {{ $laporan->jenis == 'Pemasukan' ? '+' : '-' }} {{ $laporan->formatted_jumlah }}
+                                        class="font-semibold {{ $laporan->jenis == 'Pendapatan' ? 'text-green-600' : 'text-red-600' }}">
+                                        {{ $laporan->jenis == 'Pendapatan' ? '+' : '-' }} {{ $laporan->formatted_jumlah }}
                                     </span>
                                 </td>
                                 <td class="px-6 py-4 text-center">
@@ -280,7 +280,7 @@
                                             <i class="fas fa-file-invoice-dollar text-gray-400 text-3xl"></i>
                                         </div>
                                         <p class="text-gray-500 font-medium">Belum ada laporan keuangan</p>
-                                        <p class="text-gray-400 text-sm mt-1">Mulai catat pemasukan dan pengeluaran Anda
+                                        <p class="text-gray-400 text-sm mt-1">Mulai catat Pendapatan dan pengeluaran Anda
                                         </p>
                                     </div>
                                 </td>
@@ -404,3 +404,4 @@
         }
     </script>
 @endpush
+

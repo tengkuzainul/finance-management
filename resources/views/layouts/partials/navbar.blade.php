@@ -76,7 +76,7 @@
 
             <!-- Quick Add Button - Different for Admin vs Karyawan -->
             @if (auth()->user()?->is_admin)
-                <!-- Admin: Dropdown with Pemasukan & Pengeluaran -->
+                <!-- Admin: Dropdown with Pendapatan & Pengeluaran -->
                 <div class="relative hidden md:block" id="quick-add-container">
                     <button onclick="toggleQuickAdd()"
                         class="flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-orange-500 to-orange-600 text-white text-sm font-medium rounded-xl hover:from-orange-600 hover:to-orange-700 shadow-lg shadow-orange-500/30 transition-all duration-200">
@@ -94,7 +94,7 @@
                                 <i class="fas fa-arrow-down text-green-600"></i>
                             </div>
                             <div>
-                                <p class="font-medium text-green-700">Pemasukan</p>
+                                <p class="font-medium text-green-700">Pendapatan</p>
                                 <p class="text-xs text-slate-400">Catat pendapatan baru</p>
                             </div>
                         </a>
@@ -111,11 +111,11 @@
                     </div>
                 </div>
             @else
-                <!-- Karyawan: Direct link to Pemasukan -->
-                <a href="{{ route('karyawan.pemasukan.create') }}"
+                <!-- Karyawan: Direct link to Pendapatan -->
+                <a href="{{ route('karyawan.Pendapatan.create') }}"
                     class="hidden md:flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-green-500 to-green-600 text-white text-sm font-medium rounded-xl hover:from-green-600 hover:to-green-700 shadow-lg shadow-green-500/30 transition-all duration-200">
                     <i class="fas fa-plus"></i>
-                    <span>Input Pemasukan</span>
+                    <span>Input Pendapatan</span>
                 </a>
             @endif
 
@@ -438,11 +438,11 @@
             keywords: ['laporan', 'keuangan', 'transaksi', 'report', 'finance']
         },
         {
-            name: 'Input Pemasukan',
+            name: 'Input Pendapatan',
             url: '{{ route('master-data.laporan-keuangan.create', ['jenis' => Hashids::encode(1)]) }}',
             icon: 'fa-arrow-down',
             category: 'Transaksi',
-            keywords: ['pemasukan', 'income', 'pendapatan', 'masuk']
+            keywords: ['Pendapatan', 'income', 'pendapatan', 'masuk']
         },
         {
             name: 'Input Pengeluaran',
@@ -511,18 +511,18 @@
             keywords: ['beranda', 'home', 'statistik']
         },
         {
-            name: 'Pemasukan Saya',
-            url: '{{ route('karyawan.pemasukan.index') }}',
+            name: 'Pendapatan Saya',
+            url: '{{ route('karyawan.Pendapatan.index') }}',
             icon: 'fa-arrow-down',
             category: 'Transaksi',
-            keywords: ['pemasukan', 'income', 'pendapatan', 'transaksi']
+            keywords: ['Pendapatan', 'income', 'pendapatan', 'transaksi']
         },
         {
-            name: 'Input Pemasukan',
-            url: '{{ route('karyawan.pemasukan.create') }}',
+            name: 'Input Pendapatan',
+            url: '{{ route('karyawan.Pendapatan.create') }}',
             icon: 'fa-plus-circle',
             category: 'Transaksi',
-            keywords: ['input', 'tambah', 'catat pemasukan']
+            keywords: ['input', 'tambah', 'catat Pendapatan']
         },
         {
             name: 'Gaji Saya',
@@ -698,3 +698,4 @@
         });
     }
 </script>
+

@@ -55,7 +55,7 @@
                 </div>
                 <span class="px-2.5 py-1 bg-white/20 text-white text-xs font-medium rounded-lg">+12.5%</span>
             </div>
-            <h3 class="text-white/80 text-sm font-medium mb-1">Total Pemasukan</h3>
+            <h3 class="text-white/80 text-sm font-medium mb-1">Total Pendapatan</h3>
             <p class="text-2xl font-bold">Rp 24.500.000</p>
         </div>
 
@@ -97,7 +97,7 @@
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
         <!-- Income vs Expense Chart -->
         <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100">
-            <h2 class="text-lg font-bold text-slate-800 mb-4">Grafik Pemasukan vs Pengeluaran</h2>
+            <h2 class="text-lg font-bold text-slate-800 mb-4">Grafik Pendapatan vs Pengeluaran</h2>
             <div class="h-72 bg-gradient-to-br from-slate-50 to-slate-100 rounded-xl flex items-center justify-center">
                 <div class="text-center">
                     <i class="fas fa-chart-bar text-4xl text-slate-300 mb-3"></i>
@@ -205,3 +205,4 @@
         </a>
     </div>
 @endsection
+

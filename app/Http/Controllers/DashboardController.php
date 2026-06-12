@@ -30,7 +30,7 @@ class DashboardController extends Controller
         $akhirBulanLalu = Carbon::now()->subMonth()->endOfMonth();
 
         // Stats bulan ini
-        $totalPemasukan = LaporanKeuangan::pemasukan()->approved()
+        $totalPemasukan = LaporanKeuangan::Pendapatan()->approved()
             ->where('tanggal', '>=', $bulanIni)
             ->sum('jumlah');
 
@@ -47,7 +47,7 @@ class DashboardController extends Controller
             ->count();
 
         // Stats bulan lalu untuk perbandingan
-        $pemasukanBulanLalu = LaporanKeuangan::pemasukan()->approved()
+        $pemasukanBulanLalu = LaporanKeuangan::Pendapatan()->approved()
             ->whereBetween('tanggal', [$bulanLalu, $akhirBulanLalu])
             ->sum('jumlah');
 
@@ -107,7 +107,7 @@ class DashboardController extends Controller
         $chartData = collect();
         for ($i = 6; $i >= 0; $i--) {
             $date = Carbon::now()->subDays($i);
-            $pemasukan = LaporanKeuangan::pemasukan()->approved()
+            $Pendapatan = LaporanKeuangan::Pendapatan()->approved()
                 ->whereDate('tanggal', $date)
                 ->sum('jumlah');
             $pengeluaran = LaporanKeuangan::pengeluaran()->approved()
@@ -117,7 +117,7 @@ class DashboardController extends Controller
             $chartData->push([
                 'date' => $date->format('d M'),
                 'day' => $date->translatedFormat('D'),
-                'pemasukan' => $pemasukan,
+                'Pendapatan' => $Pendapatan,
                 'pengeluaran' => $pengeluaran,
             ]);
         }
@@ -127,9 +127,9 @@ class DashboardController extends Controller
             ->withCount(['laporanKeuangans as transaksi_count' => function ($query) use ($bulanIni) {
                 $query->where('status', 'Approved')->where('tanggal', '>=', $bulanIni);
             }])
-            ->withSum(['laporanKeuangans as pemasukan' => function ($query) use ($bulanIni) {
+            ->withSum(['laporanKeuangans as Pendapatan' => function ($query) use ($bulanIni) {
                 $query->where('status', 'Approved')
-                    ->where('jenis', 'Pemasukan')
+                    ->where('jenis', 'Pendapatan')
                     ->where('tanggal', '>=', $bulanIni);
             }], 'jumlah')
             ->withSum(['laporanKeuangans as pengeluaran' => function ($query) use ($bulanIni) {
@@ -137,7 +137,7 @@ class DashboardController extends Controller
                     ->where('jenis', 'Pengeluaran')
                     ->where('tanggal', '>=', $bulanIni);
             }], 'jumlah')
-            ->orderByDesc('pemasukan')
+            ->orderByDesc('Pendapatan')
             ->get();
 
         return view('dashboard', compact('stats', 'recentTransactions', 'chartData', 'cabangStats'));
@@ -160,7 +160,7 @@ class DashboardController extends Controller
 
         // Stats karyawan - hanya data miliknya
         $totalPemasukan = LaporanKeuangan::where('karyawan_id', $karyawan->id)
-            ->pemasukan()
+            ->Pendapatan()
             ->approved()
             ->where('tanggal', '>=', $bulanIni)
             ->sum('jumlah');
@@ -194,9 +194,9 @@ class DashboardController extends Controller
             ->where('tanggal', '>=', $bulanIni)
             ->sum('nominal_gaji');
 
-        // Pemasukan hari ini (untuk perhitungan estimasi gaji)
+        // Pendapatan hari ini (untuk perhitungan estimasi gaji)
         $pemasukanHariIni = LaporanKeuangan::where('karyawan_id', $karyawan->id)
-            ->pemasukan()
+            ->Pendapatan()
             ->approved()
             ->whereDate('tanggal', $hariIni)
             ->sum('jumlah');
@@ -234,8 +234,8 @@ class DashboardController extends Controller
         $chartData = collect();
         for ($i = 6; $i >= 0; $i--) {
             $date = Carbon::now()->subDays($i);
-            $pemasukan = LaporanKeuangan::where('karyawan_id', $karyawan->id)
-                ->pemasukan()
+            $Pendapatan = LaporanKeuangan::where('karyawan_id', $karyawan->id)
+                ->Pendapatan()
                 ->approved()
                 ->whereDate('tanggal', $date)
                 ->sum('jumlah');
@@ -243,7 +243,7 @@ class DashboardController extends Controller
             $chartData->push([
                 'date' => $date->format('d M'),
                 'day' => $date->translatedFormat('D'),
-                'pemasukan' => $pemasukan,
+                'Pendapatan' => $Pendapatan,
             ]);
         }
 
@@ -262,3 +262,4 @@ class DashboardController extends Controller
         return view('dashboard-karyawan', compact('stats', 'recentTransactions', 'chartData', 'gajiHistory', 'karyawan', 'informasiList'));
     }
 }
+

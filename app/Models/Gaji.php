@@ -63,7 +63,7 @@ class Gaji extends Model
     }
 
     /**
-     * Hitung gaji dari pemasukan dan persentase
+     * Hitung gaji dari Pendapatan dan persentase
      */
     public static function calculateGaji(float $totalPemasukan, float $persenGaji): float
     {
@@ -83,3 +83,4 @@ class Gaji extends Model
         };
     }
 }
+

@@ -40,7 +40,7 @@
                     <div class="flex items-center gap-3">
                         <div class="w-10 h-10 rounded-lg bg-green-100 flex items-center justify-center">
                             <i
-                                class="fas fa-{{ $jenis === 'Pemasukan' ? 'arrow-up' : 'arrow-down' }} text-green-600 text-lg"></i>
+                                class="fas fa-{{ $jenis === 'Pendapatan' ? 'arrow-up' : 'arrow-down' }} text-green-600 text-lg"></i>
                         </div>
                         <div>
                             <h2 class="font-semibold text-green-800">{{ $jenis }}</h2>
@@ -266,3 +266,4 @@
         }
     </script>
 @endpush
+

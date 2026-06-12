@@ -91,14 +91,14 @@ Route::middleware('auth')->group(function () {
     // ADMIN ONLY ROUTES - Old Routes (untuk kompatibilitas)
     // =====================================================
     Route::middleware('admin')->group(function () {
-        // Pemasukan
-        Route::get('/pemasukan', function () {
+        // Pendapatan
+        Route::get('/Pendapatan', function () {
             return redirect()->route('master-data.laporan-keuangan.index', ['jenis' => Hashids::encode(1)]);
-        })->name('pemasukan.index');
+        })->name('Pendapatan.index');
 
-        Route::get('/pemasukan/create', function () {
+        Route::get('/Pendapatan/create', function () {
             return redirect()->route('master-data.laporan-keuangan.create', ['jenis' => Hashids::encode(1)]);
-        })->name('pemasukan.create');
+        })->name('Pendapatan.create');
 
         // Pengeluaran
         Route::get('/pengeluaran', function () {
@@ -136,10 +136,10 @@ Route::middleware('auth')->group(function () {
     // KARYAWAN ROUTES (khusus non-admin)
     // =====================================================
     Route::prefix('karyawan')->name('karyawan.')->middleware('karyawan')->group(function () {
-        // Input Pemasukan
-        Route::get('/pemasukan', [KaryawanLaporanController::class, 'indexPemasukan'])->name('pemasukan.index');
-        Route::get('/pemasukan/create', [KaryawanLaporanController::class, 'createPemasukan'])->name('pemasukan.create');
-        Route::post('/pemasukan', [KaryawanLaporanController::class, 'storePemasukan'])->name('pemasukan.store');
+        // Input Pendapatan
+        Route::get('/Pendapatan', [KaryawanLaporanController::class, 'indexPendapatan'])->name('Pendapatan.index');
+        Route::get('/Pendapatan/create', [KaryawanLaporanController::class, 'createPendapatan'])->name('Pendapatan.create');
+        Route::post('/Pendapatan', [KaryawanLaporanController::class, 'storePendapatan'])->name('Pendapatan.store');
 
         // Laporan Karyawan
         Route::get('/laporan/harian', [KaryawanLaporanController::class, 'laporanHarian'])->name('laporan.harian');
@@ -216,3 +216,4 @@ Route::middleware('auth')->group(function () {
     // =====================================================
     Route::get('/informasi/{id}', [PengaturanController::class, 'showInformasi'])->name('informasi.show');
 });
+

@@ -51,13 +51,13 @@
             <div class="lg:col-span-2 space-y-6">
                 <!-- Laporan Card -->
                 <div class="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden">
-                    <div class="px-6 py-4 {{ $laporanKeuangan->jenis == 'Pemasukan' ? 'bg-green-50' : 'bg-red-50' }}">
+                    <div class="px-6 py-4 {{ $laporanKeuangan->jenis == 'Pendapatan' ? 'bg-green-50' : 'bg-red-50' }}">
                         <div class="flex items-center justify-between">
                             <div class="flex items-center gap-3">
                                 <div
-                                    class="w-12 h-12 rounded-xl {{ $laporanKeuangan->jenis == 'Pemasukan' ? 'bg-green-100' : 'bg-red-100' }} flex items-center justify-center">
+                                    class="w-12 h-12 rounded-xl {{ $laporanKeuangan->jenis == 'Pendapatan' ? 'bg-green-100' : 'bg-red-100' }} flex items-center justify-center">
                                     <i
-                                        class="fas {{ $laporanKeuangan->jenis == 'Pemasukan' ? 'fa-arrow-up text-green-600' : 'fa-arrow-down text-red-600' }} text-xl"></i>
+                                        class="fas {{ $laporanKeuangan->jenis == 'Pendapatan' ? 'fa-arrow-up text-green-600' : 'fa-arrow-down text-red-600' }} text-xl"></i>
                                 </div>
                                 <div>
                                     <span
@@ -65,7 +65,7 @@
                                         {{ $laporanKeuangan->jenis }}
                                     </span>
                                     <p
-                                        class="text-sm {{ $laporanKeuangan->jenis == 'Pemasukan' ? 'text-green-600' : 'text-red-600' }} mt-1">
+                                        class="text-sm {{ $laporanKeuangan->jenis == 'Pendapatan' ? 'text-green-600' : 'text-red-600' }} mt-1">
                                         {{ $laporanKeuangan->kategori }}
                                     </p>
                                 </div>
@@ -82,8 +82,8 @@
                         <div class="text-center py-6 border-b border-gray-100">
                             <p class="text-sm text-gray-500 mb-2">Jumlah</p>
                             <p
-                                class="text-4xl font-bold {{ $laporanKeuangan->jenis == 'Pemasukan' ? 'text-green-600' : 'text-red-600' }}">
-                                {{ $laporanKeuangan->jenis == 'Pemasukan' ? '+' : '-' }}
+                                class="text-4xl font-bold {{ $laporanKeuangan->jenis == 'Pendapatan' ? 'text-green-600' : 'text-red-600' }}">
+                                {{ $laporanKeuangan->jenis == 'Pendapatan' ? '+' : '-' }}
                                 {{ $laporanKeuangan->formatted_jumlah }}
                             </p>
                         </div>
@@ -344,3 +344,4 @@
         }
     </script>
 @endpush
+

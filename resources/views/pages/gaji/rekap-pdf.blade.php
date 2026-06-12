@@ -274,7 +274,7 @@
         <div class="summary-cards">
             <div class="summary-card">
                 <div class="summary-card-inner">
-                    <div class="label">Total Pemasukan</div>
+                    <div class="label">Total Pendapatan</div>
                     <div class="value">Rp {{ number_format($gajis->sum('total_pemasukan'), 0, ',', '.') }}</div>
                 </div>
             </div>
@@ -309,7 +309,7 @@
                     <th>Nama Karyawan</th>
                     <th>Cabang</th>
                     <th style="width: 50px;">Jml Trx</th>
-                    <th>Total Pemasukan</th>
+                    <th>Total Pendapatan</th>
                     <th style="width: 45px;">Persen</th>
                     <th>Nominal Gaji</th>
                     <th style="width: 80px;">Status</th>
@@ -422,3 +422,4 @@
 </body>
 
 </html>
+

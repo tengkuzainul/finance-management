@@ -76,12 +76,12 @@
             <p class="px-4 text-xs font-semibold text-slate-400 uppercase tracking-wider mb-2">Keuangan</p>
         </div>
 
-        <!-- Pemasukan -->
-        <a href="{{ auth()->user()?->is_admin ? url('/pemasukan') : route('karyawan.pemasukan.create') }}"
-            class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 {{ request()->is('pemasukan*') || request()->routeIs('karyawan.pemasukan.*') ? 'bg-linear-to-r from-orange-500 to-orange-600 text-white shadow-lg shadow-orange-500/30' : 'text-slate-600 hover:bg-slate-100' }}">
+        <!-- Pendapatan -->
+        <a href="{{ auth()->user()?->is_admin ? url('/Pendapatan') : route('karyawan.Pendapatan.create') }}"
+            class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 {{ request()->is('Pendapatan*') || request()->routeIs('karyawan.Pendapatan.*') ? 'bg-linear-to-r from-orange-500 to-orange-600 text-white shadow-lg shadow-orange-500/30' : 'text-slate-600 hover:bg-slate-100' }}">
             <i
-                class="fas fa-arrow-down w-5 text-center {{ request()->is('pemasukan*') || request()->routeIs('karyawan.pemasukan.*') ? '' : 'text-green-500' }}"></i>
-            <span>{{ auth()->user()?->is_admin ? 'Pemasukan' : 'Input Pemasukan' }}</span>
+                class="fas fa-arrow-down w-5 text-center {{ request()->is('Pendapatan*') || request()->routeIs('karyawan.Pendapatan.*') ? '' : 'text-green-500' }}"></i>
+            <span>{{ auth()->user()?->is_admin ? 'Pendapatan' : 'Input Pendapatan' }}</span>
         </a>
 
         @if (auth()->user()?->is_admin)
@@ -186,3 +186,4 @@
         @endif
     </nav>
 </aside>
+

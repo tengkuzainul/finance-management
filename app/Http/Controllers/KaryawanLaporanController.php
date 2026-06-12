@@ -26,9 +26,9 @@ class KaryawanLaporanController extends Controller
    }
 
    /**
-    * List pemasukan dari karyawan sendiri
+    * List Pendapatan dari karyawan sendiri
     */
-   public function indexPemasukan(Request $request): View
+   public function indexPendapatan(Request $request): View
    {
       $karyawan = $this->getKaryawanForUser();
 
@@ -78,9 +78,9 @@ class KaryawanLaporanController extends Controller
    }
 
    /**
-    * Show form untuk input pemasukan (khusus karyawan)
+    * Show form untuk input Pendapatan (khusus karyawan)
     */
-   public function createPemasukan(): View
+   public function createPendapatan(): View
    {
       $karyawan = $this->getKaryawanForUser();
 
@@ -96,9 +96,9 @@ class KaryawanLaporanController extends Controller
    }
 
    /**
-    * Store pemasukan dari karyawan
+    * Store Pendapatan dari karyawan
     */
-   public function storePemasukan(Request $request): JsonResponse
+   public function storePendapatan(Request $request): JsonResponse
    {
       $karyawan = $this->getKaryawanForUser();
 
@@ -155,9 +155,9 @@ class KaryawanLaporanController extends Controller
          // Kirim notifikasi ke admin hanya jika status Pending
          if ($status === LaporanKeuangan::STATUS_PENDING) {
             Notification::notifyAdminsNewLaporan($laporan);
-            $message = 'Laporan pemasukan berhasil diajukan dan menunggu approval admin.';
+            $message = 'Laporan Pendapatan berhasil diajukan dan menunggu approval admin.';
          } else {
-            $message = 'Laporan pemasukan berhasil disimpan sebagai draft.';
+            $message = 'Laporan Pendapatan berhasil disimpan sebagai draft.';
          }
 
          return response()->json([
@@ -195,7 +195,7 @@ class KaryawanLaporanController extends Controller
       $laporans = $query->orderBy('created_at', 'desc')->get();
 
       $summary = [
-         'total_pemasukan' => $laporans->where('jenis', 'Pemasukan')->sum('jumlah'),
+         'total_pemasukan' => $laporans->where('jenis', 'Pendapatan')->sum('jumlah'),
          'total_pengeluaran' => $laporans->where('jenis', 'Pengeluaran')->sum('jumlah'),
       ];
       $summary['saldo'] = $summary['total_pemasukan'] - $summary['total_pengeluaran'];
@@ -235,7 +235,7 @@ class KaryawanLaporanController extends Controller
       });
 
       $summary = [
-         'total_pemasukan' => $laporans->where('jenis', 'Pemasukan')->sum('jumlah'),
+         'total_pemasukan' => $laporans->where('jenis', 'Pendapatan')->sum('jumlah'),
          'total_pengeluaran' => $laporans->where('jenis', 'Pengeluaran')->sum('jumlah'),
       ];
       $summary['saldo'] = $summary['total_pemasukan'] - $summary['total_pengeluaran'];
@@ -293,16 +293,16 @@ class KaryawanLaporanController extends Controller
          if ($weekLaporans->isNotEmpty()) {
             $weeklyStats->push([
                'minggu' => $week,
-               'pemasukan' => $weekLaporans->where('jenis', 'Pemasukan')->sum('jumlah'),
+               'Pendapatan' => $weekLaporans->where('jenis', 'Pendapatan')->sum('jumlah'),
                'pengeluaran' => $weekLaporans->where('jenis', 'Pengeluaran')->sum('jumlah'),
-               'saldo' => $weekLaporans->where('jenis', 'Pemasukan')->sum('jumlah') - $weekLaporans->where('jenis', 'Pengeluaran')->sum('jumlah'),
+               'saldo' => $weekLaporans->where('jenis', 'Pendapatan')->sum('jumlah') - $weekLaporans->where('jenis', 'Pengeluaran')->sum('jumlah'),
                'transaksi' => $weekLaporans->count(),
             ]);
          }
       }
 
       $summary = [
-         'total_pemasukan' => $laporans->where('jenis', 'Pemasukan')->sum('jumlah'),
+         'total_pemasukan' => $laporans->where('jenis', 'Pendapatan')->sum('jumlah'),
          'total_pengeluaran' => $laporans->where('jenis', 'Pengeluaran')->sum('jumlah'),
          'jumlah_transaksi' => $laporans->count(),
       ];
@@ -586,3 +586,4 @@ class KaryawanLaporanController extends Controller
       return view('pages.karyawan.informasi.show', compact('informasi'));
    }
 }
+

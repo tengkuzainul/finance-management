@@ -9,6 +9,7 @@ use App\Http\Controllers\KaryawanLaporanController;
 use App\Http\Controllers\LaporanKeuanganController;
 use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\PengaturanController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 use Vinkla\Hashids\Facades\Hashids;
 
@@ -212,8 +213,21 @@ Route::middleware('auth')->group(function () {
     });
 
     // =====================================================
+    // USER MANAGEMENT ROUTES (Admin Only)
+    // =====================================================
+    Route::prefix('users')->name('users.')->middleware('admin')->group(function () {
+        Route::get('/', [UserController::class, 'index'])->name('index');
+        Route::get('/create', [UserController::class, 'create'])->name('create');
+        Route::post('/', [UserController::class, 'store'])->name('store');
+        Route::get('/{user}', [UserController::class, 'show'])->name('show');
+        Route::get('/{user}/edit', [UserController::class, 'edit'])->name('edit');
+        Route::put('/{user}', [UserController::class, 'update'])->name('update');
+        Route::delete('/{user}', [UserController::class, 'destroy'])->name('destroy');
+        Route::post('/{user}/toggle-status', [UserController::class, 'toggleStatus'])->name('toggle-status');
+    });
+
+    // =====================================================
     // INFORMASI PUBLIC ROUTES (untuk karyawan melihat detail)
     // =====================================================
     Route::get('/informasi/{id}', [PengaturanController::class, 'showInformasi'])->name('informasi.show');
 });
-

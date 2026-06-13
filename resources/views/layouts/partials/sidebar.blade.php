@@ -4,8 +4,7 @@
     <!-- Logo -->
     <div class="h-16 flex items-center justify-between px-4 border-b border-slate-200">
         <a href="{{ url('/dashboard') }}" class="flex items-center gap-3">
-            <div
-                class="w-10 h-10 rounded-xl flex items-center justify-center">
+            <div class="w-10 h-10 rounded-xl flex items-center justify-center">
                 <img src="{{ URL::asset('logo.png') }}" alt="{{ config('app.name') }}" class="w-6 h-6 object-contain">
             </div>
             <div>
@@ -178,12 +177,33 @@
 
         <!-- Settings (Admin Only) -->
         @if (auth()->user()?->is_admin)
-            <a href="{{ route('settings.index') }}"
-                class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 {{ request()->is('settings*') ? 'bg-linear-to-r from-orange-500 to-orange-600 text-white shadow-lg shadow-orange-500/30' : 'text-slate-600 hover:bg-slate-100' }}">
-                <i class="fas fa-cog w-5 text-center {{ request()->is('settings*') ? '' : 'text-slate-500' }}"></i>
-                <span>Pengaturan</span>
-            </a>
+            <div>
+                <button onclick="toggleDropdown('pengaturan-menu')"
+                    class="w-full flex items-center justify-between gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200 {{ request()->is('settings*') || request()->is('users*') ? 'bg-linear-to-r from-orange-500 to-orange-600 text-white shadow-lg shadow-orange-500/30' : 'text-slate-600 hover:bg-slate-100' }}">
+                    <div class="flex items-center gap-3">
+                        <i
+                            class="fas fa-cog w-5 text-center {{ request()->is('settings*') || request()->is('users*') ? '' : 'text-slate-500' }}"></i>
+                        <span>Pengaturan</span>
+                    </div>
+                    <i id="pengaturan-menu-icon"
+                        class="fas fa-chevron-down text-xs transition-transform duration-200 {{ request()->is('settings*') || request()->is('users*') ? 'rotate-180' : '' }}"></i>
+                </button>
+                <div id="pengaturan-menu"
+                    class="{{ request()->is('settings*') || request()->is('users*') ? '' : 'hidden' }} mt-1 ml-6 space-y-1">
+                    <a href="{{ route('settings.index') }}"
+                        class="flex items-center gap-3 px-4 py-2 rounded-lg text-sm transition-colors {{ request()->is('settings') || request()->routeIs('settings.index') || (request()->routeIs('settings.*') && !request()->is('users*')) ? 'bg-orange-50 text-orange-600 font-medium' : 'text-slate-600 hover:bg-slate-100' }}">
+                        <i
+                            class="fas fa-sliders-h w-4 text-center {{ request()->is('settings') || request()->routeIs('settings.index') ? 'text-orange-500' : 'text-slate-400' }}"></i>
+                        <span>Konfigurasi Sistem</span>
+                    </a>
+                    <a href="{{ route('users.index') }}"
+                        class="flex items-center gap-3 px-4 py-2 rounded-lg text-sm transition-colors {{ request()->is('users*') ? 'bg-orange-50 text-orange-600 font-medium' : 'text-slate-600 hover:bg-slate-100' }}">
+                        <i
+                            class="fas fa-users w-4 text-center {{ request()->is('users*') ? 'text-orange-500' : 'text-slate-400' }}"></i>
+                        <span>Manajemen Pengguna</span>
+                    </a>
+                </div>
+            </div>
         @endif
     </nav>
 </aside>
-

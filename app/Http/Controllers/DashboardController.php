@@ -9,6 +9,7 @@ use App\Models\LaporanKeuangan;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
@@ -38,7 +39,7 @@ class DashboardController extends Controller
             ->where('tanggal', '>=', $bulanIni)
             ->sum('jumlah');
 
-        $totalGaji = Gaji::where('status', 'paid')
+        $totalGaji = Gaji::query()->where('status', 'paid')
             ->where('tanggal', '>=', $bulanIni)
             ->sum('nominal_gaji');
 
@@ -48,11 +49,11 @@ class DashboardController extends Controller
 
         // Stats bulan lalu untuk perbandingan
         $pemasukanBulanLalu = LaporanKeuangan::Pendapatan()->approved()
-            ->whereBetween('tanggal', [$bulanLalu, $akhirBulanLalu])
+            ->periode($bulanLalu, $akhirBulanLalu)
             ->sum('jumlah');
 
         $pengeluaranBulanLalu = LaporanKeuangan::pengeluaran()->approved()
-            ->whereBetween('tanggal', [$bulanLalu, $akhirBulanLalu])
+            ->periode($bulanLalu, $akhirBulanLalu)
             ->sum('jumlah');
 
         // Hitung persentase perubahan
@@ -184,12 +185,12 @@ class DashboardController extends Controller
             ->count();
 
         // Gaji karyawan bulan ini
-        $gajiDibayar = Gaji::where('karyawan_id', $karyawan->id)
+        $gajiDibayar = Gaji::query()->where('karyawan_id', $karyawan->id)
             ->where('status', 'paid')
             ->where('tanggal', '>=', $bulanIni)
             ->sum('nominal_gaji');
 
-        $gajiPending = Gaji::where('karyawan_id', $karyawan->id)
+        $gajiPending = Gaji::query()->where('karyawan_id', $karyawan->id)
             ->where('status', 'pending')
             ->where('tanggal', '>=', $bulanIni)
             ->sum('nominal_gaji');
@@ -248,7 +249,7 @@ class DashboardController extends Controller
         }
 
         // Riwayat gaji
-        $gajiHistory = Gaji::where('karyawan_id', $karyawan->id)
+        $gajiHistory = Gaji::query()->where('karyawan_id', $karyawan->id)
             ->orderBy('tanggal', 'desc')
             ->limit(5)
             ->get();
@@ -260,6 +261,56 @@ class DashboardController extends Controller
             ->get();
 
         return view('dashboard-karyawan', compact('stats', 'recentTransactions', 'chartData', 'gajiHistory', 'karyawan', 'informasiList'));
+    }
+
+    /**
+     * API: Get branch revenue data for charts.
+     */
+    public function branchRevenueData(Request $request)
+    {
+        $request->validate([
+            'filter_type' => 'required|in:day,month,year',
+            'date' => 'required|string',
+        ]);
+
+        $filterType = $request->filter_type;
+        $dateStr = $request->date;
+
+        $query = LaporanKeuangan::where('jenis', 'Pendapatan')
+            ->where('status', 'Approved');
+
+        if ($filterType === 'day') {
+            $date = Carbon::parse($dateStr);
+            $query->whereDate('tanggal', $date);
+        } elseif ($filterType === 'month') {
+            $date = Carbon::parse($dateStr . '-01');
+            $query->whereMonth('tanggal', $date->month)
+                  ->whereYear('tanggal', $date->year);
+        } elseif ($filterType === 'year') {
+            $query->whereYear('tanggal', $dateStr);
+        }
+
+        // Get all active branches first
+        $branches = Cabang::active()->orderBy('nama_cabang')->get();
+
+        // Get the revenue grouped by cabang_id
+        $revenueData = $query->select('cabang_id', DB::raw('SUM(jumlah) as total_revenue'))
+            ->groupBy('cabang_id')
+            ->pluck('total_revenue', 'cabang_id');
+
+        $labels = [];
+        $data = [];
+
+        foreach ($branches as $branch) {
+            $labels[] = $branch->nama_cabang;
+            $data[] = (float)($revenueData[$branch->id] ?? 0);
+        }
+
+        return response()->json([
+            'success' => true,
+            'labels' => $labels,
+            'data' => $data,
+        ]);
     }
 }
 

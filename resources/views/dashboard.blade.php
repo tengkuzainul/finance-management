@@ -171,6 +171,71 @@
         </div>
     </div>
 
+    <!-- Grafik Pendapatan Cabang Section -->
+    <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 mb-8">
+        <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-6">
+            <div>
+                <h2 class="text-lg font-bold text-slate-800">Performa Pendapatan per Cabang</h2>
+                <p class="text-sm text-slate-500">Analisis perbandingan pendapatan harian, bulanan, atau tahunan antar seluruh cabang</p>
+            </div>
+            <div class="flex flex-wrap items-center gap-3">
+                <!-- Filter Type Buttons -->
+                <div class="inline-flex rounded-lg border border-slate-200 p-1 bg-slate-50">
+                    <button type="button" onclick="setBranchFilterType('day')" id="btn-filter-day"
+                        class="px-4 py-2 text-xs font-semibold rounded-md transition-all duration-200 bg-white text-slate-800 shadow-sm border border-slate-200/50">
+                        Hari
+                    </button>
+                    <button type="button" onclick="setBranchFilterType('month')" id="btn-filter-month"
+                        class="px-4 py-2 text-xs font-semibold rounded-md transition-all duration-200 text-slate-600 hover:text-slate-800">
+                        Bulan
+                    </button>
+                    <button type="button" onclick="setBranchFilterType('year')" id="btn-filter-year"
+                        class="px-4 py-2 text-xs font-semibold rounded-md transition-all duration-200 text-slate-600 hover:text-slate-800">
+                        Tahun
+                    </button>
+                </div>
+
+                <!-- Dynamic Date Pickers -->
+                <div class="relative min-w-[150px]">
+                    <!-- Date Picker (Day) -->
+                    <input type="date" id="branch-picker-day" onchange="fetchBranchRevenueData()"
+                        value="{{ now()->format('Y-m-d') }}"
+                        class="w-full px-3 py-2 bg-white border border-slate-200 rounded-xl text-sm text-slate-600 focus:outline-hidden focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all">
+                    
+                    <!-- Month Picker (Month) -->
+                    <input type="month" id="branch-picker-month" onchange="fetchBranchRevenueData()"
+                        value="{{ now()->format('Y-m') }}"
+                        class="hidden w-full px-3 py-2 bg-white border border-slate-200 rounded-xl text-sm text-slate-600 focus:outline-hidden focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all">
+
+                    <!-- Year Picker (Year) -->
+                    <select id="branch-picker-year" onchange="fetchBranchRevenueData()"
+                        class="hidden w-full px-3 py-2 bg-white border border-slate-200 rounded-xl text-sm text-slate-600 focus:outline-hidden focus:ring-2 focus:ring-orange-500/20 focus:border-orange-500 transition-all">
+                        @for ($y = now()->year; $y >= now()->year - 4; $y--)
+                            <option value="{{ $y }}">{{ $y }}</option>
+                        @endfor
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <!-- Chart -->
+        <div class="h-80 w-full relative">
+            <div id="chart-loading-state" class="absolute inset-0 flex items-center justify-center bg-white/60 z-10 hidden">
+                <div class="flex flex-col items-center gap-2">
+                    <i class="fas fa-spinner fa-spin text-orange-500 text-2xl"></i>
+                    <span class="text-xs text-slate-400">Memuat data...</span>
+                </div>
+            </div>
+            <div id="chart-empty-state" class="absolute inset-0 flex items-center justify-center bg-white z-10 hidden">
+                <div class="flex flex-col items-center gap-2 text-slate-400">
+                    <i class="fas fa-chart-bar text-3xl"></i>
+                    <span class="text-sm">Tidak ada data pendapatan untuk periode ini</span>
+                </div>
+            </div>
+            <canvas id="chartPendapatanCabang"></canvas>
+        </div>
+    </div>
+
     <!-- Recent Transactions & Quick Actions -->
     <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <!-- Recent Transactions -->
@@ -343,6 +408,198 @@
                 }
             }
         });
+
+        // ========================================================
+        // GRAFIK PENDAPATAN PER CABANG
+        // ========================================================
+        let branchChart = null;
+        let branchFilterType = 'day';
+
+        function setBranchFilterType(type) {
+            branchFilterType = type;
+            
+            // Update button styles
+            const btnDay = document.getElementById('btn-filter-day');
+            const btnMonth = document.getElementById('btn-filter-month');
+            const btnYear = document.getElementById('btn-filter-year');
+
+            const activeClasses = ['bg-white', 'text-slate-800', 'shadow-sm', 'border', 'border-slate-200/50'];
+            const inactiveClasses = ['text-slate-600', 'hover:text-slate-800'];
+
+            // Clear all classes first
+            [btnDay, btnMonth, btnYear].forEach(btn => {
+                activeClasses.forEach(c => btn.classList.remove(c));
+                inactiveClasses.forEach(c => btn.classList.remove(c));
+            });
+
+            if (type === 'day') {
+                btnDay.classList.add(...activeClasses);
+                btnMonth.classList.add(...inactiveClasses);
+                btnYear.classList.add(...inactiveClasses);
+
+                document.getElementById('branch-picker-day').classList.remove('hidden');
+                document.getElementById('branch-picker-month').classList.add('hidden');
+                document.getElementById('branch-picker-year').classList.add('hidden');
+            } else if (type === 'month') {
+                btnDay.classList.add(...inactiveClasses);
+                btnMonth.classList.add(...activeClasses);
+                btnYear.classList.add(...inactiveClasses);
+
+                document.getElementById('branch-picker-day').classList.add('hidden');
+                document.getElementById('branch-picker-month').classList.remove('hidden');
+                document.getElementById('branch-picker-year').classList.add('hidden');
+            } else if (type === 'year') {
+                btnDay.classList.add(...inactiveClasses);
+                btnMonth.classList.add(...inactiveClasses);
+                btnYear.classList.add(...activeClasses);
+
+                document.getElementById('branch-picker-day').classList.add('hidden');
+                document.getElementById('branch-picker-month').classList.add('hidden');
+                document.getElementById('branch-picker-year').classList.remove('hidden');
+            }
+
+            fetchBranchRevenueData();
+        }
+
+        function fetchBranchRevenueData() {
+            let dateVal = '';
+            if (branchFilterType === 'day') {
+                dateVal = document.getElementById('branch-picker-day').value;
+            } else if (branchFilterType === 'month') {
+                dateVal = document.getElementById('branch-picker-month').value;
+            } else if (branchFilterType === 'year') {
+                dateVal = document.getElementById('branch-picker-year').value;
+            }
+
+            if (!dateVal) return;
+
+            // Show loading
+            document.getElementById('chart-loading-state').classList.remove('hidden');
+            document.getElementById('chart-empty-state').classList.add('hidden');
+
+            const url = `{{ route('api.branch-revenue') }}?filter_type=${branchFilterType}&date=${dateVal}`;
+
+            fetch(url)
+                .then(response => response.json())
+                .then(res => {
+                    document.getElementById('chart-loading-state').classList.add('hidden');
+                    
+                    if (res.success) {
+                        const labels = res.labels;
+                        const data = res.data;
+
+                        // Check if all data is zero
+                        const totalSum = data.reduce((a, b) => a + b, 0);
+                        if (totalSum === 0) {
+                            document.getElementById('chart-empty-state').classList.remove('hidden');
+                        } else {
+                            document.getElementById('chart-empty-state').classList.add('hidden');
+                        }
+
+                        renderBranchChart(labels, data);
+                    }
+                })
+                .catch(err => {
+                    document.getElementById('chart-loading-state').classList.add('hidden');
+                    console.error('Error fetching branch revenue data:', err);
+                });
+        }
+
+        function renderBranchChart(labels, data) {
+            const ctxBranch = document.getElementById('chartPendapatanCabang').getContext('2d');
+            
+            // Determine max and min non-zero values to highlight
+            const maxVal = Math.max(...data);
+            let minVal = Infinity;
+            
+            // Find minimum non-zero value, or minimum value if all are zero/equal
+            data.forEach(val => {
+                if (val > 0 && val < minVal) {
+                    minVal = val;
+                }
+            });
+            
+            // If all are zero or no non-zero min, fallback to standard min
+            if (minVal === Infinity) {
+                minVal = Math.min(...data);
+            }
+
+            const bgColors = [];
+            const borderColors = [];
+
+            data.forEach(val => {
+                if (val === maxVal && maxVal > 0) {
+                    // Highest performance - Emerald Green
+                    bgColors.push('rgba(16, 185, 129, 0.8)');
+                    borderColors.push('rgb(16, 185, 129)');
+                } else if (val === minVal && val < maxVal && val > 0) {
+                    // Lowest non-zero performance - Rose Red
+                    bgColors.push('rgba(244, 63, 94, 0.8)');
+                    borderColors.push('rgb(244, 63, 94)');
+                } else {
+                    // Standard brand orange
+                    bgColors.push('rgba(249, 115, 22, 0.7)');
+                    borderColors.push('rgb(249, 115, 22)');
+                }
+            });
+
+            if (branchChart) {
+                branchChart.data.labels = labels;
+                branchChart.data.datasets[0].data = data;
+                branchChart.data.datasets[0].backgroundColor = bgColors;
+                branchChart.data.datasets[0].borderColor = borderColors;
+                branchChart.update();
+            } else {
+                branchChart = new Chart(ctxBranch, {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            label: 'Pendapatan Cabang',
+                            data: data,
+                            backgroundColor: bgColors,
+                            borderColor: borderColors,
+                            borderWidth: 1,
+                            borderRadius: 6,
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        return 'Pendapatan: Rp ' + context.raw.toLocaleString('id-ID');
+                                    }
+                                }
+                            }
+                        },
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                ticks: {
+                                    callback: function(value) {
+                                        if (value >= 1000000) {
+                                            return 'Rp ' + (value / 1000000).toFixed(1) + 'jt';
+                                        } else if (value >= 1000) {
+                                            return 'Rp ' + (value / 1000).toFixed(0) + 'rb';
+                                        }
+                                        return 'Rp ' + value;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        }
+
+        // Fetch initial branch data
+        fetchBranchRevenueData();
     </script>
 @endpush
 

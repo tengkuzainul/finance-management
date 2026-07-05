@@ -101,7 +101,7 @@ class GajiController extends Controller
          }
       }
 
-      // Get all approved Pendapatan for that date, grouped by karyawan
+      // Get all approved Pendapatan for that date, grouped by cabang_id
       $query = LaporanKeuangan::where('jenis', 'Pendapatan')
          ->where('status', 'Approved')
          ->whereDate('tanggal', $tanggal);
@@ -110,46 +110,57 @@ class GajiController extends Controller
          $query->where('cabang_id', $cabangFilter);
       }
 
-      $pemasukanByKaryawan = $query->select(
-         'karyawan_id',
+      $pemasukanByCabang = $query->select(
          'cabang_id',
          DB::raw('SUM(jumlah) as total_pemasukan'),
          DB::raw('COUNT(*) as jumlah_transaksi')
       )
-         ->groupBy('karyawan_id', 'cabang_id')
+         ->groupBy('cabang_id')
          ->get();
 
       $created = 0;
       $updated = 0;
       $skipped = 0;
 
-      foreach ($pemasukanByKaryawan as $data) {
-         if (!$data->karyawan_id) {
+      foreach ($pemasukanByCabang as $data) {
+         if (!$data->cabang_id) {
             $skipped++;
             continue;
          }
 
-         $nominalGaji = Gaji::calculateGaji($data->total_pemasukan, $persenGaji);
+         // Get all active employees in this cabang
+         $karyawans = Karyawan::where('cabang_id', $data->cabang_id)
+            ->where('is_active', true)
+            ->get();
 
-         $gaji = Gaji::updateOrCreate(
-            [
-               'karyawan_id' => $data->karyawan_id,
-               'tanggal' => $tanggal->toDateString(),
-            ],
-            [
-               'cabang_id' => $data->cabang_id,
-               'total_pemasukan' => $data->total_pemasukan,
-               'persen_gaji' => $persenGaji,
-               'nominal_gaji' => $nominalGaji,
-               'jumlah_transaksi' => $data->jumlah_transaksi,
-               'status' => 'pending',
-            ]
-         );
+         if ($karyawans->isEmpty()) {
+            $skipped++;
+            continue;
+         }
 
-         if ($gaji->wasRecentlyCreated) {
-            $created++;
-         } else {
-            $updated++;
+         foreach ($karyawans as $karyawan) {
+            $nominalGaji = Gaji::calculateGaji($data->total_pemasukan, $persenGaji);
+
+            $gaji = Gaji::updateOrCreate(
+               [
+                  'karyawan_id' => $karyawan->id,
+                  'tanggal' => $tanggal->toDateString(),
+               ],
+               [
+                  'cabang_id' => $data->cabang_id,
+                  'total_pemasukan' => $data->total_pemasukan,
+                  'persen_gaji' => $persenGaji,
+                  'nominal_gaji' => $nominalGaji,
+                  'jumlah_transaksi' => $data->jumlah_transaksi,
+                  'status' => 'pending',
+               ]
+            );
+
+            if ($gaji->wasRecentlyCreated) {
+               $created++;
+            } else {
+               $updated++;
+            }
          }
       }
 
@@ -267,8 +278,8 @@ class GajiController extends Controller
 
       $gaji = Gaji::with(['karyawan.user', 'cabang', 'approver'])->findOrFail($decoded[0]);
 
-      // Get related laporan keuangan for that day
-      $laporans = LaporanKeuangan::where('karyawan_id', $gaji->karyawan_id)
+      // Get related laporan keuangan for that day based on branch
+      $laporans = LaporanKeuangan::where('cabang_id', $gaji->cabang_id)
          ->where('jenis', 'Pendapatan')
          ->where('status', 'Approved')
          ->whereDate('tanggal', $gaji->tanggal)
@@ -289,8 +300,8 @@ class GajiController extends Controller
 
       $gaji = Gaji::with(['karyawan.user', 'cabang', 'approver'])->findOrFail($decoded[0]);
 
-      // Get related laporan keuangan
-      $laporans = LaporanKeuangan::where('karyawan_id', $gaji->karyawan_id)
+      // Get related laporan keuangan based on branch
+      $laporans = LaporanKeuangan::where('cabang_id', $gaji->cabang_id)
          ->where('jenis', 'Pendapatan')
          ->where('status', 'Approved')
          ->whereDate('tanggal', $gaji->tanggal)
@@ -423,8 +434,8 @@ class GajiController extends Controller
          ->where('karyawan_id', $karyawan->id)
          ->findOrFail($decoded[0]);
 
-      // Get related laporan keuangan
-      $laporans = LaporanKeuangan::where('karyawan_id', $karyawan->id)
+      // Get related laporan keuangan based on branch
+      $laporans = LaporanKeuangan::where('cabang_id', $gaji->cabang_id)
          ->where('jenis', 'Pendapatan')
          ->where('status', 'Approved')
          ->whereDate('tanggal', $gaji->tanggal)
@@ -454,8 +465,8 @@ class GajiController extends Controller
          ->where('karyawan_id', $karyawan->id)
          ->findOrFail($decoded[0]);
 
-      // Get related laporan keuangan
-      $laporans = LaporanKeuangan::where('karyawan_id', $karyawan->id)
+      // Get related laporan keuangan based on branch
+      $laporans = LaporanKeuangan::where('cabang_id', $gaji->cabang_id)
          ->where('jenis', 'Pendapatan')
          ->where('status', 'Approved')
          ->whereDate('tanggal', $gaji->tanggal)

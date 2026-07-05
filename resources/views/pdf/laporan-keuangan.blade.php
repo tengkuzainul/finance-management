@@ -14,9 +14,9 @@
 
         body {
             font-family: 'DejaVu Sans', sans-serif;
-            font-size: 11px;
-            line-height: 1.5;
-            color: #333;
+            font-size: 12px;
+            line-height: 1.6;
+            color: #1f2937;
         }
 
         .container {
@@ -127,10 +127,10 @@
         .data-table th {
             background-color: #f97316;
             color: white;
-            padding: 10px 8px;
+            padding: 12px 10px;
             text-align: left;
             font-weight: bold;
-            font-size: 10px;
+            font-size: 11px;
         }
 
         .data-table th:first-child {
@@ -142,8 +142,10 @@
         }
 
         .data-table td {
-            padding: 8px;
+            padding: 10px 10px;
             border-bottom: 1px solid #e5e7eb;
+            font-size: 11px;
+            word-wrap: break-word;
         }
 
         .data-table tr:nth-child(even) {
@@ -323,7 +325,7 @@
                         <tr>
                             <td class="text-center">{{ $index + 1 }}</td>
                             <td>{{ $laporan->tanggal->format('d/m/Y') }}</td>
-                            <td>{{ Str::limit($laporan->keterangan, 40) }}</td>
+                            <td>{{ Str::limit($laporan->keterangan, 100) }}</td>
                             <td>{{ $laporan->kategori }}</td>
                             <td>{{ $laporan->cabang->nama_cabang ?? '-' }}</td>
                             <td class="text-center">

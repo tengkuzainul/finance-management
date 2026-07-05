@@ -35,6 +35,7 @@ Route::middleware('guest')->group(function () {
 Route::middleware('auth')->group(function () {
     // Dashboard
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/api/branch-revenue', [DashboardController::class, 'branchRevenueData'])->name('api.branch-revenue')->middleware('admin');
 
     // Logout
     Route::post('/logout', [LoginController::class, 'logout'])->name('logout');

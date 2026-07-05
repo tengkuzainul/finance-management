@@ -14,8 +14,8 @@
 
         body {
             font-family: 'DejaVu Sans', Arial, sans-serif;
-            font-size: 11px;
-            color: #333;
+            font-size: 12px;
+            color: #1f2937;
             background: #fff;
         }
 
@@ -131,7 +131,7 @@
 
         .data-table th,
         .data-table td {
-            padding: 8px 10px;
+            padding: 10px 10px;
             text-align: left;
             border: 1px solid #e5e7eb;
         }
@@ -140,7 +140,7 @@
             background: #f97316;
             color: #fff;
             font-weight: 600;
-            font-size: 10px;
+            font-size: 11px;
             text-transform: uppercase;
         }
 
